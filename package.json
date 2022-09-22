@@ -1,0 +1,23 @@
+{
+  "name": "p7-les-petits-plats-openclassroom",
+  "version": "1.0.0",
+  "description": "projet 7 OpenClassroom",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --max-warnings=0 ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vypnico974/P7-Les-Petits-Plats-OpenClassroom.git"
+  },
+  "author": "Vyplasil Nicolas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vypnico974/P7-Les-Petits-Plats-OpenClassroom/issues"
+  },
+  "homepage": "https://github.com/vypnico974/P7-Les-Petits-Plats-OpenClassroom#readme",
+  "dependencies": {
+    "eslint": "^8.23.1"
+  }
+}
