@@ -1,0 +1,114 @@
+*{
+/* règles d'espacements pour l' accessibilité*/ 
+    line-height: 1.5 ;
+    letter-spacing: 0.12rem ;
+    word-spacing: 0.16rem ;  
+}
+p{
+    margin-bottom: 2rem;
+} 
+
+:root{
+    /*  variables couleurs  */ 
+    --logo-color: #d04f4f;
+    --primary-color: #3282f7;
+    --secondary-color: #68d9a4;
+    --tertiary-color: #ed6454;
+    --background-color:#E7E7E7;
+    --outline-color:#7a7a7a;    
+}
+.background-primary{
+    background-color: var(--primary-color) ;
+}
+.background-secondary{
+    background-color: var(--secondary-color) ;
+}
+.background-tertiary{
+    background-color: var(--tertiary-color) ;
+}
+/* Gestion de l'affichage des éléments (flèches et boutons) */
+.hidden{
+    display: none;
+}
+.visible{
+    display: block;
+}
+
+body {
+       font-family: "DM Sans", sans-serif;
+       max-width: 1900px;
+       margin: auto;
+       box-sizing: border-box;
+}
+
+/**  partie en-tête  **/
+header img{
+   font-size: 2rem;
+}
+.text-logo {
+    color: var(--logo-color);
+}
+
+/**  partie barre de recherche  **/
+.search-bar {
+    padding: 0px;
+    margin-top: 20px;   
+    border-radius: 5px;
+    position: relative;
+    width: 100%;
+}
+#search-input{
+    width: 100%;
+    padding-left: 20px;
+    border-radius: 5px;
+    min-height: 60px;
+    background-color:var(--background-color);
+    border-width: 0;
+    outline-color:var(--background-color); 
+}
+.search-icon {
+    position: absolute;
+    font-size: 2rem;
+    top: 15px;
+    right: 15px;
+}
+
+/** partie menus filtres   **/
+#div-menus {
+    padding: 0px;
+    margin-top: 20px;
+    column-gap: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-height: 60px;    
+}
+.menu-button{
+    min-height: 60px;
+    min-width: 170px;
+    max-width: 600px;
+    color: white;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 0px 10px;
+    column-gap: 30px;
+
+}
+.div-menu i{
+    cursor: pointer;
+}
+#ingredients-arrowDown-button{
+    border-style: none;
+    outline-color:var(--primary-color);   
+}
+#ingredients-arrowDown-button:hover,#ingredients-arrowDown-button:focus{
+    border-style: none;
+    outline-color:var(--primary-color); 
+    box-shadow: none;    
+}
+
+
+
