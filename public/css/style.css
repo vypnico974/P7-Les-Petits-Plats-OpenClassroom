@@ -2,7 +2,7 @@
 /* règles d'espacements pour l' accessibilité*/ 
     line-height: 1.5 ;
     letter-spacing: 0.12rem ;
-    word-spacing: 0.16rem ;  
+    word-spacing: 0.16rem ;
 }
 p{
     margin-bottom: 2rem;
@@ -36,17 +36,40 @@ p{
 
 body {
        font-family: "DM Sans", sans-serif;
-       max-width: 1900px;
-       margin: auto;
        box-sizing: border-box;
+       max-width: 1900px;
+       margin : auto;
+       padding-left: 50px;
+       padding-right: 50px; 
+       
+}
+@media all and (max-width: 767px) {
+    body {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
 }
 
+
 /**  partie en-tête  **/
+.div-center {
+   font-size: 1.5rem;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   flex-direction: column;
+}
+header h1{
+   margin:0;
+}
 header img{
-   font-size: 2rem;
+    position: relative;
+    top: 20px;
 }
 .text-logo {
     color: var(--logo-color);
+    
 }
 
 /**  partie barre de recherche  **/
@@ -109,6 +132,142 @@ header img{
     outline-color:var(--primary-color); 
     box-shadow: none;    
 }
+
+
+
+/****  partie affichage recette *****/
+
+#div-recipes{
+    margin-top: 20px;
+    column-gap: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+@media all and (max-width: 750px) {
+    /*
+    #div-recipes {
+      justify-content: center;
+    } */
+    .card-recipe{
+        width: 370px;  
+        margin-bottom: 20px;
+         
+    }
+  }
+
+
+
+#div-message{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card-recipe{
+    width: 390px;  
+    margin-bottom: 20px;
+     
+}
+/* affichage six lignes de descriptions au plus
+si plus, ... et  caché le reste du texte*/
+.card-text{
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.h2-Recipe{
+    font-size: 1rem;
+}  
+
+.recipeBlock{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+
+/* pour le moment pas d'image, mise en place d'un fond gris */
+.recipePicture{
+    height: 170px;
+    width: 100%;
+    margin: 0px;
+    object-fit: cover;
+    background-color: #c7bebee3;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+/*
+.recipeInformations{
+    width: 100%;
+    min-height: 250px;
+    margin: 0px;
+    background-color: var(--background-color) ;
+    padding : 15px 20px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 15px;
+    column-gap: 20px;
+}
+*/
+.divRecipeInfo{
+    background-color: var(--background-color) ;
+    min-height: 160px;
+}
+.headRecipeInfo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.mainRecipeInfo{
+    display: flex;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.mainRecipeInfo p{
+    margin: 0;  
+}
+.divRecipeName{   
+    font-weight: 600;
+    padding-left: 10px;
+    font-size: 0.8rem;
+}
+.timerRecipe{
+    font-weight: 900;
+    padding-right: 5px;
+    font-size: 0.8rem;
+}
+.timerRecipe i{
+    margin-right: 5px;
+}
+.divIngredientsRight, .divIngredientsLeft {
+    width:50%;
+    font-size: 0.6rem;
+}
+.divIngredientsLeft{
+    padding-left: 6px;
+}
+.recipeDescription{
+    font-size: 0.6rem;
+    font-weight: 600;
+}
+.bold800{
+    font-weight: 800;
+}
+
+
 
 
 

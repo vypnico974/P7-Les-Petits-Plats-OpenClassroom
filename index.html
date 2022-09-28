@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<!-- meta -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" type="image/png" href="./public/image/icone_logo.png">
+<!-- CSS -->
+<link href="./public/css/normalize.css" rel="stylesheet" type="text/css" />
+<link href="./public/css/style.css" rel="stylesheet" type="text/css" />
+ <!-- google fonts import --> 
+ <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+ <!-- kit fontawesome pour import d'icône-->
+ <script src="https://kit.fontawesome.com/0b6d538c32.js" crossorigin="anonymous"></script>
+<title>Les petits plats</title>
+</head>
+<body>
+
+    <header>
+        <!-- Logo les petits plats -->
+        <div class="div-center">
+            <div>
+                <a href="./index.html">
+                    <img src="./public/image/icone_logo.png" alt="Page d'acceuil les Petits Plats"/>
+                </a>                
+            </div>            
+            <h1 class="text-logo text-center">Les petits plats</h1>
+        </div>
+       
+    </header>
+
+    <main id="main">
+        <!-- barre de recherche -->
+        <div class="search-bar">
+            <input id="search-input" placeholder="Rechercher une recette..." aria-label="Recherche">
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+        </div>
+
+       
+        <div id="div-tags">          
+            <ul></ul>
+
+        </div>
+
+
+        <!-- bloc menus-->
+        <div id="div-menus">
+            <!--menu ingrédients-->
+            <div id="menu-ingredients" class="div-menu background-primary" >
+                <div class="menu-button">
+                    <span>Ingrédients</span>
+                    <input type="text"
+                    id="input-ingredient"
+                    class="menu-input hidden"
+                    placeholder="Rechercher un ingrédient"
+                    name="inputIngredient"
+                    autocomplete="off" 
+                    aria-label="ingrédients">
+                    <div class="div-arrow">
+                        <button id="ingredients-arrowDown-button"
+                                 class="btn background-primary">
+                            <i id="visible-ingredients-list" class="fa-solid fa-angle-down menu-arrowDown"></i>
+                        </button>    
+                        <!--                    
+                        <button id="ingredients-arrowUp-button" class="background-primary hidden">
+                            <i id="hide-ingredients-list" class="fa-solid fa-angle-up menu-arrowUp"></i>
+                        </button>  
+                        -->   
+                        <!--liste des ingrédients-->
+                        <ul id="ingredients-list"
+                            data-type="ingredients"
+                            class="dropdown-menu-custom background-primary"
+                        ></ul> 
+                    </div>                    
+                </div> 
+                <!--affichage liste ingrédients-->
+                <div id="list-ingredients" class="menu-list"></div>
+            </div>
+             <!--menu appareils-->
+             <div class="div-menu background-secondary" id="menu-appareils">
+                <div class="menu-button">
+                    <span>Appareils</span>
+                    <input type="text" id="input-appareils" class="menu-input hidden" placeholder="Rechercher un appareil"
+                     name="inputAppareils"  aria-label="appareils">
+                    <div class="div-arrow">
+                        <i id="visible-appareils-list" class="fa-solid fa-angle-down menu-arrowDown"></i>
+                        <i id="hide-appareils-list" class="fa-solid fa-angle-up menu-arrowUp"></i>
+                    </div>                    
+                </div> 
+                <!--affichage liste appareils-->
+                <div id="list-appareils" class="menu-list"></div>
+            </div>
+            <!--menu ustensils-->
+            <div class="div-menu background-tertiary" id="menu-ustensils">
+                <div class="menu-button">
+                    <span>Ustensils</span>
+                    <input type="text" id="input-ustensils" class="menu-input hidden" placeholder="Rechercher un ustensil"
+                     name="inputUstensils"  aria-label="ustensils">
+                    <div class="div-arrow">
+                        <i id="visible-ustensils-list" class="fa-solid fa-angle-down menu-arrowDown"></i>
+                        <i id="hide-ustensils-list" class="fa-solid fa-angle-up menu-arrowUp"></i>
+                    </div>                    
+                </div> 
+                <!--affichage liste appareils-->
+                <div id="list-ustensils" class="menu-list"></div>
+            </div>
+
+            
+        </div>
+
+        <!-- bloc message aucun resultat...-->
+        <div id="div-message">
+            
+        </div>
+
+
+        <!-- bloc recettes-->
+        <div id="div-recipes">
+            
+        </div>
+
+
+    </main>
+
+
+    <script src="./javascript/index.js" type="module"></script>
+
+   </body>
+</html>
+
