@@ -11,28 +11,14 @@ p{
 :root{
     /*  variables couleurs  */ 
     --logo-color: #d04f4f;
-    --primary-color: #3282f7;
-    --secondary-color: #68d9a4;
-    --tertiary-color: #ed6454;
     --background-color:#E7E7E7;
-    --outline-color:#7a7a7a;    
-}
-.background-primary{
-    background-color: var(--primary-color) ;
-}
-.background-secondary{
-    background-color: var(--secondary-color) ;
-}
-.background-tertiary{
-    background-color: var(--tertiary-color) ;
-}
-/* Gestion de l'affichage des éléments (flèches et boutons) */
-.hidden{
-    display: none;
-}
-.visible{
-    display: block;
-}
+    --outline-color:#7a7a7a;  
+    --colorIngredient: #3282F7;
+    --colorAppareil: #68D9A4;
+    --colorUstensile: #ED6454;
+ }
+
+
 
 body {
        font-family: "DM Sans", sans-serif;
@@ -65,7 +51,7 @@ header h1{
 }
 header img{
     position: relative;
-    top: 20px;
+    top: 8px;
 }
 .text-logo {
     color: var(--logo-color);
@@ -97,20 +83,45 @@ header img{
 }
 
 /** partie menus filtres   **/
-#div-menus {
+
+input[type="text"]{
+    min-height: 65px;
+    border: none;
+    background-color: transparent;
+    
+}
+#div-Menu{
+    margin: 0px;
     padding: 0px;
-    margin-top: 20px;
     column-gap: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    min-height: 60px;    
 }
-.menu-button{
-    min-height: 60px;
-    min-width: 170px;
+
+.div-filter{
+    height: 65px;
     max-width: 600px;
+    min-width: 180px;
     color: white;
+    border-radius: 5px;
+    padding: 0px;
+    column-gap: 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+#filterIngredients.show, #filterAppliances.show, #filterUstensiles.show{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.div-filter i::before{
+    cursor: pointer;
+}
+
+.filterButton{
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -118,21 +129,68 @@ header img{
     justify-content: space-around;
     padding: 0px 10px;
     column-gap: 30px;
-
+    width: 100%;
+    height: 100%;
 }
-.div-menu i{
+
+#hideUstensilesList.hidden, #hideAppliancesList.hidden, #hideIngredientsList.hidden  {
+    display:none;
+}
+
+.filterList, .inputFilter, .filterArrowUp, .show .filterArrowDown, .show span, .filterArrowUp{
+    display: none;
+}
+
+.show .filterArrowUp, .show .filterList, .show .inputFilter{
+    display: flex;
+}
+
+.div-arrow{
+    display: flex;
+    width: 15px;
+}
+
+.show .filterList{
+    width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 20px;
+    row-gap: 15px;
+    padding: 10px 10px;
+    z-index: 1;
+}
+
+#filterIngredients, #filterIngredients .filterList{
+    background-color: var(--colorIngredient);
+}
+
+#filterAppliances, #filterAppliances .filterList{
+    background-color: var(--colorAppareil);
+}
+
+#filterUstensiles, #filterUstensiles .filterList{
+    background-color: var(--colorUstensile);
+}
+
+.inputFilter{
+    outline: none;
+    width: calc(100% - 50px);
+    margin: 0px;
+}
+
+.inputFilter::placeholder{
+    color: white;
+    opacity: 0.8;
+}
+
+.filterItem{
+    display: flex;
+    align-items: center;
+    width: 180px;
     cursor: pointer;
 }
-#ingredients-arrowDown-button{
-    border-style: none;
-    outline-color:var(--primary-color);   
-}
-#ingredients-arrowDown-button:hover,#ingredients-arrowDown-button:focus{
-    border-style: none;
-    outline-color:var(--primary-color); 
-    box-shadow: none;    
-}
-
 
 
 /****  partie affichage recette *****/

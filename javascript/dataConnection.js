@@ -6,7 +6,7 @@ export async function getRecipes() {
         const response = await fetch("./data/recipes.json");
         /* attendre la résolution de la promesse  */
         const data = await response.json(); 
-        console.log(data);
+      //  console.log(data);
         data.recipes.forEach(recipe => {
             recipe.display = true
         });
