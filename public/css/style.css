@@ -1,5 +1,5 @@
 *{
-/* règles d'espacements pour l' accessibilité*/ 
+/* règles d'espacements pour l'accessibilité */ 
     line-height: 1.5 ;
     letter-spacing: 0.12rem ;
     word-spacing: 0.16rem ;
@@ -14,8 +14,8 @@ p{
     --background-color:#E7E7E7;
     --outline-color:#7a7a7a;  
     --colorIngredient: #3282F7;
-    --colorAppareil: #68D9A4;
-    --colorUstensile: #ED6454;
+    --colorAppliance: #68D9A4;
+    --colorUstensil: #ED6454;
  }
 
 
@@ -69,6 +69,7 @@ header img{
 #search-input{
     width: 100%;
     padding-left: 20px;
+    margin-bottom: 30px;
     border-radius: 5px;
     min-height: 60px;
     background-color:var(--background-color);
@@ -86,9 +87,9 @@ header img{
 
 input[type="text"]{
     min-height: 65px;
+    color: white;
     border: none;
-    background-color: transparent;
-    
+    background-color: transparent;    
 }
 #div-Menu{
     margin: 0px;
@@ -112,7 +113,7 @@ input[type="text"]{
     position: relative;
 }
 
-#filterIngredients.show, #filterAppliances.show, #filterUstensiles.show{
+#filterIngredients.show, #filterAppliances.show, #filterUstensils.show{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
@@ -133,7 +134,7 @@ input[type="text"]{
     height: 100%;
 }
 
-#hideUstensilesList.hidden, #hideAppliancesList.hidden, #hideIngredientsList.hidden  {
+#hideUstensilsList.hidden, #hideAppliancesList.hidden, #hideIngredientsList.hidden  {
     display:none;
 }
 
@@ -167,11 +168,11 @@ input[type="text"]{
 }
 
 #filterAppliances, #filterAppliances .filterList{
-    background-color: var(--colorAppareil);
+    background-color: var(--colorAppliance);
 }
 
-#filterUstensiles, #filterUstensiles .filterList{
-    background-color: var(--colorUstensile);
+#filterUstensils, #filterUstensils .filterList{
+    background-color: var(--colorUstensil);
 }
 
 .inputFilter{
@@ -220,10 +221,7 @@ input[type="text"]{
 
 
 #div-message{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    margin-top: 30px;
 }
 
 .card-recipe{
@@ -232,7 +230,7 @@ input[type="text"]{
      
 }
 /* affichage six lignes de descriptions au plus
-si plus, ... et  caché le reste du texte*/
+si plus, ... et  masqué le reste du texte*/
 .card-text{
     display: -webkit-box;
     -webkit-line-clamp: 6;
@@ -251,7 +249,7 @@ si plus, ... et  caché le reste du texte*/
 }
 
 
-/* pour le moment pas d'image, mise en place d'un fond gris */
+/* pas d'image, mise en place d'un fond gris */
 .recipePicture{
     height: 170px;
     width: 100%;
@@ -262,23 +260,6 @@ si plus, ... et  caché le reste du texte*/
     border-top-right-radius: 5px;
 }
 
-/*
-.recipeInformations{
-    width: 100%;
-    min-height: 250px;
-    margin: 0px;
-    background-color: var(--background-color) ;
-    padding : 15px 20px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    row-gap: 15px;
-    column-gap: 20px;
-}
-*/
 .divRecipeInfo{
     background-color: var(--background-color) ;
     min-height: 160px;
@@ -325,6 +306,47 @@ si plus, ... et  caché le reste du texte*/
     font-weight: 800;
 }
 
+
+/* Mise en forme des tags */
+#div-tags{
+    margin: 0px;
+    padding: 0px;
+    column-gap: 10px;
+    row-gap: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+div.tag{
+    color: white;
+    border-radius: 5px;
+    width: fit-content;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 10px;
+    padding: 0px 10px;
+}
+/*   à vérifier**************** */
+div.tag i::before{
+    cursor: pointer;
+}
+div.tag i:hover{
+    transform: scale(1.3);
+}
+div.ingredientTag{
+    background-color: var(--colorIngredient);
+    margin-bottom: 5px;
+}
+div.applianceTag{
+    background-color: var(--colorAppliance);
+    margin-bottom: 5px;
+}
+div.ustensilTag{
+    background-color: var(--colorUstensil);
+    margin-bottom: 5px;
+}
 
 
 

@@ -45,10 +45,9 @@ crossorigin="anonymous"
         </div>
 
        
-        <div id="div-tags">          
-            <ul></ul>
+        <!--Tag sélectionnés-->
+        <div id="div-tags"></div>
 
-        </div>
 
         <!-- Menu des filtres ingrédients-appareils-ustensiles -->
         <div id="div-Menu">
@@ -56,7 +55,7 @@ crossorigin="anonymous"
             <div class="div-filter bold" id="filterIngredients">
                 <div class="filterButton">
                     <span>Ingrédients</span>
-                    <input type="text" class="inputFilter" placeholder="Rechercher un ingrédient" name="inputIngredient" id="inputIngredient">
+                    <input  name="inputIngredient" id="inputIngredient" type="text" class="inputFilter" placeholder="Rechercher un ingrédient">
                     <div class="div-arrow">
                         <i id="visibleIngredientsList" class="fa-solid fa-angle-down filterArrowDown" ></i>
                         <i id="hideIngredientsList" class="fa-solid fa-angle-up filterArrowUp hidden"></i>
@@ -77,16 +76,17 @@ crossorigin="anonymous"
                 <div id="appliancesList" class="filterList"></div>
             </div>
             <!--filtre appareils-->           
-            <div id="filterUstensiles" class="div-filter bold" >
+            <div id="filterUstensils" class="div-filter bold" >
                 <div class="filterButton">
                     <span>Ustensiles</span>
-                    <input type="text" class="inputFilter" placeholder="Rechercher un ustensile" name="inputUstensile" id="inputUstensile">
+                    <input type="text" class="inputFilter" placeholder="Rechercher un ustensile"
+                     name="inputUstensil" id="inputUstensil">
                     <div class="div-arrow">
-                        <i id="visibleUstensilesList" class="fa-solid fa-angle-down filterArrowDown" ></i>
-                        <i id="hideUstensilesList" class="fa-solid fa-angle-up filterArrowUp hidden" ></i>
+                        <i id="visibleUstensilsList" class="fa-solid fa-angle-down filterArrowDown" ></i>
+                        <i id="hideUstensilsList" class="fa-solid fa-angle-up filterArrowUp hidden" ></i>
                     </div>                    
                 </div>
-                <div id="ustensilesList" class="filterList"></div>
+                <div id="ustensilsList" class="filterList"></div>
             </div>
             
         </div>
