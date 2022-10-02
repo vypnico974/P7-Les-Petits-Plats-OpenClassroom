@@ -1,4 +1,4 @@
-import {getLocalStorage} from "./dataConnection.js";
+import {getLocalStorage, setLocalStorage} from "./dataConnection.js";
 
 /*  Tableau recette  */
 let currentLocalRecipes =  [];
@@ -6,14 +6,25 @@ let currentLocalRecipes =  [];
 let ingredientTags = [];
 let applianceTags = [];
 let ustensilTags = [];
+// Tableaux filtres
+let ingredientItems = [];
+let appareilItems = [];
+let ustensileItems = [];
 
 
 export function IngredientsFilter(){
-    /*  get the list of all ingredients */
     let recipesData = getLocalStorage();
+    let recipesDataTrue = [];
     let ingredientsList = [];
-    for (let index = 0; index < recipesData.length; index++) {
-        let ingredients = recipesData[index].ingredients;
+    /* sélectionne les recettes à display true   */
+    for (const recipe of recipesData){
+        if (recipe.display){
+            recipesDataTrue.push(recipe);  
+        }
+    }
+
+    for (let index = 0; index < recipesDataTrue.length; index++) {
+        let ingredients = recipesDataTrue[index].ingredients;
         ingredients.map(({ ingredient }) => {
         ingredientsList.push(`${ingredient.toLowerCase()}`);
         });
@@ -32,11 +43,17 @@ export function IngredientsFilter(){
 }
 
 export function appliancesFilter(){
-    /*  get the list of all appliances */
    let recipesData = getLocalStorage();
    let appliancesList = [];
-   for (let index = 0; index < recipesData.length; index++) {
-       let appliances = recipesData[index].appliance;
+   let recipesDataTrue = [];
+    /* sélectionne les recettes à display true   */
+   for (const recipe of recipesData){
+        if (recipe.display){
+            recipesDataTrue.push(recipe);  
+        }
+    }
+   for (let index = 0; index < recipesDataTrue.length; index++) {
+       let appliances = recipesDataTrue[index].appliance;
        appliancesList.push(`${appliances.toLowerCase()}`);
    }
 //    console.log("liste appareils :",appliancesList);
@@ -53,11 +70,17 @@ export function appliancesFilter(){
 }
 
 export function ustensilsFilter(){
-    /*  get the list of all appliances */
-   let recipesData = getLocalStorage();
+   let recipesData = getLocalStorage();;
    let ustensilsList = [];
-   for (let index = 0; index < recipesData.length; index++) {
-       let ustensils = recipesData[index].ustensils;
+   let recipesDataTrue = [];
+   /* sélectionne les recettes à display true   */
+    for (const recipe of recipesData){
+       if (recipe.display){
+           recipesDataTrue.push(recipe);  
+       }
+    }
+   for (let index = 0; index < recipesDataTrue.length; index++) {
+       let ustensils = recipesDataTrue[index].ustensils;
        ustensilsList.push(ustensils);
    }
 //    console.log("liste ustensils :", ustensilsList);
@@ -72,7 +95,7 @@ export function ustensilsFilter(){
 
    let ustensilsListUniqueSort = new Set(ustensilsListSort) 
     /* convert Set to Array */
-    let ingredientsListUnique = [...ustensilsListUniqueSort] 
+ //   let ingredientsListUnique = [...ustensilsListUniqueSort] 
  //   console.log("liste ustensils trié test :",ingredientsListUnique); 
 
    return ustensilsListUniqueSort    
@@ -85,7 +108,8 @@ export function ustensilsFilter(){
 /**
  * affichage des recettes trié par nom
  */
-export function displayRecipe(recipes){
+export function displayRecipe(){
+    const recipes = getLocalStorage();
     const recipesSortName = sortByName(recipes);
     const dom = document.querySelector("#div-recipes");
     const message = document.querySelector("#div-message");
@@ -146,6 +170,7 @@ export function displayRecipe(recipes){
            
         }      
     }); 
+    /* */
     if (!content){
         message.innerHTML =  `« Aucune recette ne correspond à votre critère… vous pouvez
         chercher « tarte aux pommes », « poisson », etc.`;
@@ -241,28 +266,91 @@ export function displayRecipe(recipes){
 
     /* listener sur les champs de recherche des filtres avancés */
     document.querySelector("#inputIngredient").addEventListener("keyup", (e) => {
-        itemSearch("ingredient", e.target.value);
+        itemAvancedSearch("ingredient", e.target.value);
     });
     document.querySelector("#inputAppliance").addEventListener("keyup", (e) => {
-        itemSearch("appareil", e.target.value);
+        itemAvancedSearch("appareil", e.target.value);
     });
     document.querySelector("#inputUstensil").addEventListener("keyup", (e) => {
-       itemSearch("ustensil", e.target.value);
+        itemAvancedSearch("ustensil", e.target.value);
     });
 }
 
 
-/**** à faire */
-export function itemSearch(nameFilter,inputItem){
-    console.log("éléments sélectionnés :", inputItem );
+/**** Filtres des champs avancés qui remontent dans 
+ la liste de chaque filtre en fonction de la recherche avancée
+ * @param {*} nameFilter  menu filtre de la recherche 
+ * @param {*} searchValue Valeur recherchée */
+ 
+export function itemAvancedSearch(nameFilter,searchValue){
+    let block = null;
+    let searchedItems = [];
+
+    // switch (nameFilter) {
+    //     case "ingredient":
+    //         block = document.getElementById("ingredientsList");
+    //         if (searchValue != "") {
+    //             for (const item of ingredientItems) {
+    //                 if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+    //                     searchedItems.push(item);
+    //                 }
+    //             }
+    //             if (searchedItems == []) {
+    //                 searchedItems = [];
+    //             }
+    //             searchedItems;
+    //             addFiltersContent(searchedItems, appareilItems, ustensileItems);
+    //         } else {
+    //             actionFilters();
+    //         }
+    //         break;
+    //     case "appareil":
+    //         block = document.getElementById("appareilsList");
+    //         if (searchValue != "") {
+    //             for (const item of appareilItems) {
+    //                 if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+    //                     searchedItems.push(item);
+    //                 }
+    //             }
+    //             if (searchedItems == []) {
+    //                 searchedItems = [];
+    //             }
+    //             searchedItems;
+    //             addFiltersContent(ingredientItems, searchedItems, ustensileItems);
+    //         } else {
+    //             actionFilters();
+    //         }
+    //         break;
+    //     case "ustensil":
+    //         block = document.getElementById("ustensilesList");
+    //         if (content != "") {
+    //             for (const item of ustensileItems) {
+    //                 if (item.toLowerCase().includes(searchValue.toLowerCase())) {
+    //                     searchedItems.push(item);
+    //                 }
+    //             }
+    //             if (searchedItems == []) {
+    //                 searchedItems = [];
+    //             }
+    //             searchedItems;
+    //             addFiltersContent(ingredientItems, appareilItems, searchedItems);
+    //         } else {
+    //             actionFilters();
+    //         }
+    //         break;
+    // }
+
+  
 }
 
 
-/** chargement liste ingrédients au chargement de la page */
-export function ingredientsLoadInit(){
+
+/** chargement liste ingrédients  */
+export function ingredientsLoad(){
     let content = [];
     let createdItems = null;
-    const ingredients = IngredientsFilter();
+    let localRecipes= getLocalStorage();
+    const ingredients = IngredientsFilter(localRecipes);
     const ingredientsList =  document.querySelector("#ingredientsList")
 
      ingredients.forEach(ingredient => {
@@ -281,12 +369,12 @@ export function ingredientsLoadInit(){
 }   
 
 
-/** chargement liste appareils au chargement de la page 
- * et écoute évènement de la liste créée.*/
-export function appliancesFilterLoadInit(){
+/** chargement liste appareils  et écoute évènement de la liste créée.*/
+export function appliancesFilterLoad(){
     let content = [];
     let createdItems = null;
-    const appliances = appliancesFilter();
+    let localRecipes= getLocalStorage();
+    const appliances = appliancesFilter(localRecipes);
     const appliancesList =  document.querySelector("#appliancesList")
 
     appliances.forEach(appliance => {
@@ -306,10 +394,11 @@ export function appliancesFilterLoadInit(){
 
 
 /** chargement liste ustensils au chargement de la page */
-export function ustensilsFilterLoadInit(){
+export function ustensilsFilterLoad(){
     let content = [];
     let createdItems = null;
-    const ustensils = ustensilsFilter();
+    let localRecipes= getLocalStorage();
+    const ustensils = ustensilsFilter(localRecipes);
     const ustensilsList =  document.querySelector("#ustensilsList")
 
     ustensils.forEach(ustensil => {
@@ -335,13 +424,31 @@ export function ustensilsFilterLoadInit(){
  * @param {*} content Texte du Tag
  */
 export function evenTag(action,nameList,item){
-    console.log(action + " " + nameList + " " + item );
+  //  console.log(action + " " + nameList + " " + item );
+   let evenTagArrayRecipes = getLocalStorage();
+   let counter = 0;
+   let isDisplay = false;
     switch (action) {
         case "add":
             switch (nameList) {
                 case "ingredient":
                     ingredientTags.push(item);
                     document.getElementById("inputIngredient").value = "";
+                    /* mise à jour de la table currentLocalRecipes pour l'affichage
+                    des résultats recettes et des champs avancés */
+                    for (const recipte of evenTagArrayRecipes){
+                        let isDisplay = false;
+                        for (const text of evenTagArrayRecipes.ingredients ){
+                            if (text.ingredient.includes(item)){
+                                isDisplay = true;
+                                break;
+                            }
+                        }                        
+                    }
+                    currentLocalRecipes[counter].display = isDisplay;
+                    counter++;
+                    /*  enregistrement maj table recette dans le local stockage du navigateur  */
+                    localStorage(currentLocalRecipes);                    
                     break;
                 case "appliance":
                     applianceTags.push(item);
@@ -373,13 +480,15 @@ export function evenTag(action,nameList,item){
 }
 
 
-/**   à faire la partie algo pour l'action de l'input de recherche et les champs avancés */
+/**en cours............ ALGO A
+ *  la partie algo pour l'action de l'input de recherche et les champs avancés */
 export function actionFilters(){
-    let currentNameRecipeList = [];
     let counter = 0;
+    let init = false;
+    let currentLocalRecipes= getLocalStorage();
     
     /*récupérer le tableau des recettes sauvegarder dans le navigateur  */
-     currentLocalRecipes = getLocalStorage();
+    // currentLocalRecipes = getLocalStorage();
     
     const inputSearch = document.getElementById("search-input").value;
     /*normalizeText : Unicode norme NFD, supprime certaines poncutations,...   */
@@ -407,15 +516,22 @@ export function actionFilters(){
                     }
                 }           
             }
-
-            currentLocalRecipes[counter].display = isDisplay;
-            counter++;
-            
            
-         
+            currentLocalRecipes[counter].display = isDisplay;
+            counter++; 
+                               
         } 
+    /* enregisterement mise à jour tableau recette display true/false dans le local
+     enregistrement du navigateur */    
+    setLocalStorage(currentLocalRecipes);   
     }
-    displayRecipe(currentLocalRecipes);
+    IngredientsFilter();
+    appliancesFilter();
+    ustensilsFilter();
+    ingredientsLoad();
+    appliancesFilterLoad();
+    ustensilsFilterLoad();
+    displayRecipe();
     displayTags();
     
 }
@@ -535,7 +651,7 @@ export function normalizeText(text){
 * @param {keywords}  mot à cherche dans les recettes
 * @param {nameList[]} nom de la liste dans la recette
 * @returns {result[]} tableau de résultat
-*/
+
 export function searchByList (searchTxt, nameList, nameRecipe){
     const result = []
     for (const text of nameList) {
@@ -545,6 +661,7 @@ export function searchByList (searchTxt, nameList, nameRecipe){
     }
     return result
   }
+  */
 
 
 

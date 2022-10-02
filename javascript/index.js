@@ -1,23 +1,24 @@
 import {getLocalStorage, getRecipes, setLocalStorage} from "./dataConnection.js";
-import {appliancesFilter, appliancesFilterLoadInit, displayRecipe, IngredientsFilter, ingredientsLoadInit, ListenersLoad, ustensilsFilter, ustensilsFilterLoadInit } from "./utils.js";
+import {appliancesFilter, appliancesFilterLoad, displayRecipe, IngredientsFilter, ingredientsLoad, ListenersLoad, ustensilsFilter, ustensilsFilterLoad } from "./utils.js";
 
 
 
 async function initPage(){
-
-  const recipes = await getRecipes();  
+  let init = true;
+  const recipes = await getRecipes();
+  /* enregistrer tout les recettes display true dans le local stockage
+  du navigateur à l'initialisation de la page  */
   setLocalStorage(recipes);
-  const localRecipes = getLocalStorage();
-
+ 
 
   ListenersLoad();
   IngredientsFilter();
   appliancesFilter();
   ustensilsFilter();
-  ingredientsLoadInit();
-  appliancesFilterLoadInit();
-  ustensilsFilterLoadInit();
-  displayRecipe(localRecipes);
+  ingredientsLoad();
+  appliancesFilterLoad();
+  ustensilsFilterLoad();
+  displayRecipe();
 }
 
 
