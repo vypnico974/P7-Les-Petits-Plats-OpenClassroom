@@ -113,6 +113,31 @@ input[type="text"]{
     position: relative;
 }
 
+.filterBlock{
+    height: 69px;
+    max-width: 600px;
+    color: white;
+    border-radius: 5px;
+    padding: 0px;
+    column-gap: 30px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+
+
+.filterBlock i::before{
+    cursor: pointer;
+}
+
+.filterItem{
+    display: flex;
+    align-items: center;
+    width: 180px;
+    cursor: pointer;
+}
+
 #filterIngredients.show, #filterAppliances.show, #filterUstensils.show{
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -269,6 +294,9 @@ si plus, ... et  masqué le reste du texte*/
     justify-content: space-between;
     align-items: center;
 
+}
+.divRecipeName {
+    width:70%;
 }
 .mainRecipeInfo{
     display: flex;

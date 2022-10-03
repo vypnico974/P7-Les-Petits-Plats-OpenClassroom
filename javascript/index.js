@@ -1,10 +1,9 @@
-import {getLocalStorage, getRecipes, setLocalStorage} from "./dataConnection.js";
-import {appliancesFilter, appliancesFilterLoad, displayRecipe, IngredientsFilter, ingredientsLoad, ListenersLoad, ustensilsFilter, ustensilsFilterLoad } from "./utils.js";
+import {getRecipes, setLocalStorage} from "./dataConnection.js";
+import {applianceListMenu, appliancesMenuDisplay, displayRecipe, IngredientsListMenu, ingredientsMenuDisplay, ListenersLoad, ustensilsListMenu, ustensilsMenuDisplay } from "./utils.js";
 
 
 
 async function initPage(){
-  let init = true;
   const recipes = await getRecipes();
   /* enregistrer tout les recettes display true dans le local stockage
   du navigateur à l'initialisation de la page  */
@@ -12,12 +11,12 @@ async function initPage(){
  
 
   ListenersLoad();
-  IngredientsFilter();
-  appliancesFilter();
-  ustensilsFilter();
-  ingredientsLoad();
-  appliancesFilterLoad();
-  ustensilsFilterLoad();
+  IngredientsListMenu();
+  applianceListMenu();
+  ustensilsListMenu();
+  ingredientsMenuDisplay();
+  appliancesMenuDisplay();
+  ustensilsMenuDisplay();
   displayRecipe();
 }
 
