@@ -11,9 +11,9 @@ async function initPage(){
  
 
   ListenersLoad();
-  IngredientsListMenu();
-  applianceListMenu();
-  ustensilsListMenu();
+ // IngredientsListMenu();
+ // applianceListMenu();
+ // ustensilsListMenu();
   ingredientsMenuDisplay();
   appliancesMenuDisplay();
   ustensilsMenuDisplay();

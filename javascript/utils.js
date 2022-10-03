@@ -14,12 +14,17 @@ export function IngredientsListMenu(){
     let recipesData = getLocalStorage();
     let recipesDataTrue = [];
     let ingredientsList = [];
+    let TestArrayIngredient = [];
     /* sélectionne les recettes à display true   */
     for (const recipe of recipesData){
         if (recipe.display){
             recipesDataTrue.push(recipe);  
+            TestArrayIngredient.push(recipe);            
         }
     }
+    /*****   test****** */
+    console.log("Les ingrédients à true:",TestArrayIngredient );
+    /********************************************************* */ 
     for (let index = 0; index < recipesDataTrue.length; index++) {
         let ingredients = recipesDataTrue[index].ingredients;
         ingredients.map(({ ingredient }) => {
@@ -107,6 +112,11 @@ export function ustensilsListMenu(){
  */
 export function displayRecipe(){
     const recipes = getLocalStorage();
+     /* Tri avec la méthode sort() et localeCompare() nécessaire
+    pour les accent et les majuscules */
+//     const sortedArray = recipes.sort(function (a, b) {
+//         return a.localeCompare(b);
+//    });
     const recipesSortName = sortByName(recipes);
     const dom = document.querySelector("#div-recipes");
     const message = document.querySelector("#div-message");
@@ -347,7 +357,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
                if (aCount !== bCount) return false;
            }
            return true;
-           }
+        }
    
        /* mise à jour liste des ingrédients dans le menu filtre */
        if (ingredientList.length == 0 || EqualItemsArrays(ingredientList, ingredientTags)) {
@@ -517,6 +527,7 @@ export function evenTag(action,nameList,item){
                     }                    
                     break;
                 case "ustensil":
+                     /* pas de doublon de tag à l'affichage  */
                     if (ustensilTags.includes(item)){
                         duplicate=true;
                     }else{
@@ -549,11 +560,14 @@ export function evenTag(action,nameList,item){
 }
 
 
-/**en cours............ ALGO A
- *  la partie algo pour l'action de l'input de recherche et les champs avancés */
+/**en cours............ ALGO A boucle native FOR
+ *  actions des filtres pour trouver le(s) recette(s) */
 export function actionFilters(){
-    let counter = 0;
-    let currentLocalRecipes= getLocalStorage();
+    let index = 0;
+    let currentLocalRecipes= sortByName(getLocalStorage());
+  //  let ingredientList = []
+
+
     let inputSearch = document.getElementById("search-input").value;
     /*normalizeText : Unicode norme NFD, supprime certaines poncutations,...   */
     let inputNormalizeSearch = normalizeText(inputSearch);
@@ -563,20 +577,21 @@ export function actionFilters(){
         console.log("valeur input recherche normalisé:",inputNormalizeSearch );
     }
      /* Si aucun filtre appliqué, affichages de toutes les recettes */
-     if (inputSearch == "" && 
-         ingredientTags.length == 0 &&
-         applianceTags.length == 0 &&
-          ustensilTags.length == 0) {
+    if (inputSearch == "" && 
+        ingredientTags.length == 0 &&
+        applianceTags.length == 0 &&
+        ustensilTags.length == 0) {
          
-         for (const recipe of currentLocalRecipes){
+        for (const recipe of currentLocalRecipes){
             recipe.display = true;
         }
 
         /* mis à jour tout display à true des recettes dans le stockage local du navigateur */
-       setLocalStorage(currentLocalRecipes);
+        setLocalStorage(currentLocalRecipes);
     }
     else{
-       /*  recherche principale inputSearch et les champs avancés (ingrédients/appareil/ustensile) */
+       /*  recherche principale inputSearch et
+        les champs avancés (ingrédients/appareil/ustensile) */
         for (const recipe of currentLocalRecipes) {
             let isDisplay = false;
            if (inputNormalizeSearch.length >  2){                
@@ -598,55 +613,87 @@ export function actionFilters(){
                 } 
             }
 
-           
-            /*  continue la recherche par les champs avancés si isDispaly est false   */
-            if (isDisplay == false) {
-                 /* champs avancés ingrédients  */
-                /*** à voir pour alogo B d'utiliser findIndex
-                 *  à la place de la boucle for **** */
-                if (ingredientTags.length > 0) {
-                    for (const text of recipe.ingredients){
-                        for (const ingredient of ingredientTags ){
-                            if (normalizeText(text.ingredient).includes(normalizeText(ingredient))){
-                                isDisplay = true;
-                                /* sortie de la boucle en cas de trouvé  */
-                                break;
-                            }
-                        }
-                    } 
-                }
-                if (isDisplay == false) {
-                    /* champs avancé appareil    */
-                    if (applianceTags.length > 0) {
-                        for (const appliance of applianceTags){
-                            if (normalizeText(recipe.appliance).includes(normalizeText(appliance))){
-                                isDisplay = true;
-                                /* sortie de la boucle en cas de trouvé  */
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (isDisplay == false) {
-                      /* champs avancé appareil    */
-                    if (ustensilTags.length > 0) {
-                        for (const ustensilTag of ustensilTags){
-                            for (const ustensil of recipe.ustensils){
-                                if (normalizeText(ustensil).includes(normalizeText(ustensilTag))){
-                                    isDisplay = true;
-                                    /* sortie de la boucle en cas de trouvé  */
-                                    break;
-                                }
-                            }                            
-                        }
-                    }
-                }               
-            }
+            /*** à voir pour algo B d'utiliser tableau findIndex
+            *  à la place de la boucle for **** 
+            * 
+            * ou filter
+            * let array1 = ["noix et chocolat", "banane", "orange", "kiwi"];
+              let array2 = ["kiwi", "orange"];
+             console.log(array1.filter(e => array2.includes(e)));
+            * 
+            * */
 
-           
-            /* display true ou false suivant les résultats des recherches   */
-            currentLocalRecipes[counter].display = isDisplay;
-            counter++;  
+            /* champs avancé ingrédients  */
+            if (ingredientTags.length > 0) {
+
+                for (const text of recipe.ingredients){
+                    for (const ingredient of ingredientTags ){
+                        if (normalizeText(text.ingredient).includes(normalizeText(ingredient))){
+                            isDisplay = true;
+                            /* sortie de la boucle en cas de trouvé  */
+                            break;
+                        }
+                    }
+                } 
+
+            //     for (const text of recipe.ingredients){  
+            //         ingredientList.push(text.ingredient);             
+                          
+            //     }
+            //    // console.log(ingredientList);
+            //     for (const ingredient of ingredientTags ){  
+            //             isDisplay = false ;                    
+            //         if (ingredientList.includes(ingredient)){
+            //             isDisplay = true;
+            //         }
+            //         if (!isDisplay){
+            //             break;
+            //         }
+            //     } 
+
+
+                // let ingredientsList = [];
+                // let ingredients = recipe[index].ingredients;
+                // ingredients.map(({ ingredient }) => {
+                //     ingredientsList.push(`${ingredient}`);
+                //     });
+                
+
+             /* Test  entre les tags Ingrédient et la recette */
+                // if (ingredientTags.length > 0) {
+                //     for (const tag of ingredientTags) {
+                //         if(recipe.ingredients.findIndex(list => list.ingredient.includes(tag)) == -1 && (isDisplay = false) ){
+                //             isDisplay = true;
+                //         }
+                //     };
+                // }
+            }
+                
+            /* champs avancé appareil    */
+            if (applianceTags.length > 0) {
+                for (const appliance of applianceTags){
+                    if (normalizeText(recipe.appliance).includes(normalizeText(appliance))){
+                        isDisplay = true;
+                        /* sortie de la boucle en cas de trouvé  */
+                        break;
+                    }
+                }
+            }
+            /* champs avancé appareil    */
+            if (ustensilTags.length > 0) {
+                for (const ustensilTag of ustensilTags){
+                    for (const ustensil of recipe.ustensils){
+                        if (normalizeText(ustensil).includes(normalizeText(ustensilTag))){
+                            isDisplay = true;
+                            /* sortie de la boucle en cas de trouvé  */
+                            break;
+                        }
+                    }                            
+                }
+            }
+            /* display true ou false pour chaque recette   */
+            currentLocalRecipes[index].display = isDisplay;
+            index++;  
 
         }
         /* enregisterement mise à jour tableau recette display true/false dans le local
@@ -654,7 +701,7 @@ export function actionFilters(){
         setLocalStorage(currentLocalRecipes);   
     }
 
-
+    /* mise à jour et affichage des recettes et des champs avancés  */
 
     IngredientsListMenu();
     applianceListMenu();
@@ -754,8 +801,8 @@ export function showItemsAdvanced(ingredientName) {
  * @return tableau trié par ordre alphabétique */ 
  export function sortByName(tab) {
     const sortedTab = tab.sort(function(a, b) {
-  //      a = a.name;
-   //     b = b.name;
+          a = normalizeText(a.name);
+          b = normalizeText(b.name);
         if (a > b) {
             return 1;
         } else if(a < b){
