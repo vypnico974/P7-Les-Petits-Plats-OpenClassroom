@@ -1,12 +1,10 @@
 import {getLocalStorage, setLocalStorage} from "./dataConnection.js";
 
-/*  Tableau recette  */
-let currentLocalRecipes =  [];
+
 /* Tableaux des tags */
 let ingredientTags = [];
 let applianceTags = [];
 let ustensilTags = [];
-
 
 
 export function IngredientsListMenu(){
@@ -22,13 +20,12 @@ export function IngredientsListMenu(){
             TestArrayIngredient.push(recipe);            
         }
     }
-    /*****   test****** */
-    console.log("Les ingrédients à true:",TestArrayIngredient );
-    /********************************************************* */ 
+    /*  enregistrer les ingrédients en minuscule dans une liste et par CSS
+    mettre la première lettre en majuscule    */
     for (let index = 0; index < recipesDataTrue.length; index++) {
         let ingredients = recipesDataTrue[index].ingredients;
         ingredients.map(({ ingredient }) => {
-        ingredientsList.push(`${ingredient}`);
+        ingredientsList.push(`${ingredient}`.toLowerCase());
         });
     }
     /* pas de doublon */
@@ -55,9 +52,11 @@ export function applianceListMenu(){
             recipesDataTrue.push(recipe);  
         }
     }
+     /*  enregistrer les appareils en minuscule dans une liste et par CSS
+    mettre la première lettre en majuscule    */
    for (let index = 0; index < recipesDataTrue.length; index++) {
        let appliances = recipesDataTrue[index].appliance;
-       appliancesList.push(`${appliances}`);
+       appliancesList.push(`${appliances}`.toLowerCase());
    }
    /* pas de doublon */
    const appliancesListUniqueSet = new Set(appliancesList);
@@ -88,7 +87,7 @@ export function ustensilsListMenu(){
        ustensilsList.push(ustensils);
    }
    /* récupérer les données du sous-tableau ustensil */
-   const ustensilsListJoined = ustensilsList.flat().map((x) => x);    
+   const ustensilsListJoined = ustensilsList.flat().map((x) => x.toLowerCase());    
   /* Tri avec la méthode sort() et localeCompare() nécessaire
     pour les accent et les majuscules */
     const sortedArray = ustensilsListJoined.sort(function (a, b) {
@@ -299,11 +298,17 @@ export function inputAvancedSearch(nameFilter,searchValue){
         case "ingredient":
             block = document.getElementById("ingredientsList");
             if (searchValue.length > 0) {
+                /* cherche correspondance entre la saisie input ingrédient et 
+                la liste des ingrédients  */
                 for (const ingredient of ingredientList) {
                     if (normalizeText(ingredient).includes(normalizeText(searchValue))) {
                         searchList.push(ingredient);
                     }
                 }
+                if (searchList == []) {
+                    searchList = [];
+                }
+                searchList;
                 addItemsFilters(searchList, applianceList, ustensilList);
             } else {
                 actionFilters();
@@ -365,7 +370,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
        } else {        
            for (const ingredient of ingredientList) {
                if (!ingredientTags.includes(ingredient)) {
-                  itemsIngredientList += showItemsAdvanced(ingredient);
+                  itemsIngredientList += showItemsAdvanced(capitalize(ingredient));
                }
            }
        }    
@@ -386,7 +391,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
        } else {     
            for (const appliance of applianceList) {
                if (!applianceTags.includes(appliance)) {
-                itemsApplianceList += showItemsAdvanced(appliance);
+                itemsApplianceList += showItemsAdvanced(capitalize(appliance));
                }
            }   
        } 
@@ -407,7 +412,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
        } else {        
            for (const ustensile of ustensilList) {
                if (!ustensilTags.includes(ustensile)) {
-                itemsUstensilList += showItemsAdvanced(ustensile);
+                itemsUstensilList += showItemsAdvanced(capitalize(capitalize(ustensile)));
                }
            }
        } 
@@ -419,7 +424,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
        createdItems = document.getElementById("ustensilsList").children;
        for (const item of createdItems) {
            item.addEventListener("click", () =>{
-                evenTag("add", "ustensile", item.innerText);            
+                evenTag("add", "ustensil", item.innerText);            
            })
        }
 }
@@ -435,7 +440,7 @@ export function ingredientsMenuDisplay(){
     const ingredientsList =  document.querySelector("#ingredientsList")
 
      ingredients.forEach(ingredient => {
-        content += `<div class="filterItem">${ingredient}</div>`;
+        content += `<div class="filterItem"><p>${ingredient}<p></div>`;
     });
 
     ingredientsList.innerHTML = content;
@@ -458,7 +463,7 @@ export function appliancesMenuDisplay(){
     const appliancesList =  document.querySelector("#appliancesList")
 
     appliances.forEach(appliance => {
-        content += `<div class="filterItem">${appliance}</div>`;
+        content += `<div class="filterItem"><p>${appliance}<p></div>`;
     });
 
     appliancesList.innerHTML = content;
@@ -481,7 +486,7 @@ export function ustensilsMenuDisplay(){
     const ustensilsList =  document.querySelector("#ustensilsList")
 
     ustensils.forEach(ustensil => {
-        content += `<div class="filterItem">${ustensil}</div>`;
+        content += `<div class="filterItem"><p>${ustensil}<p></div>`;
     });
 
     ustensilsList.innerHTML = content;
@@ -565,151 +570,134 @@ export function evenTag(action,nameList,item){
 export function actionFilters(){
     let index = 0;
     let currentLocalRecipes= sortByName(getLocalStorage());
-  //  let ingredientList = []
-
-
+    let isDisplay = "";
     let inputSearch = document.getElementById("search-input").value;
     /*normalizeText : Unicode norme NFD, supprime certaines poncutations,...   */
     let inputNormalizeSearch = normalizeText(inputSearch);
-    
+ 
     if (inputNormalizeSearch.length < 3) {
-        inputSearch = "";
-        console.log("valeur input recherche normalisé:",inputNormalizeSearch );
+        inputNormalizeSearch = "";
     }
-     /* Si aucun filtre appliqué, affichages de toutes les recettes */
-    if (inputSearch == "" && 
+     /* Si aucun filtre appliqué, affichage de toutes les recettes */
+    if (inputNormalizeSearch == "" && 
         ingredientTags.length == 0 &&
         applianceTags.length == 0 &&
-        ustensilTags.length == 0) {
-         
+        ustensilTags.length == 0) {         
         for (const recipe of currentLocalRecipes){
             recipe.display = true;
         }
-
-        /* mis à jour tout display à true des recettes dans le stockage local du navigateur */
+        /* mis à jour tout display à true des recettes dans
+         le stockage local du navigateur */
         setLocalStorage(currentLocalRecipes);
     }
     else{
-       /*  recherche principale inputSearch et
-        les champs avancés (ingrédients/appareil/ustensile) */
+       /*  recherche pour chaque recette  */
         for (const recipe of currentLocalRecipes) {
-            let isDisplay = false;
+            /* 4 bloc de recherches une recherche principale par le champs de saisie
+            et les 3 trois champs avancés (ingrédient/appareil/ustensile)
+            en fonctions résultat de ces 4 bloc, affichage ou pas de la recette */
+            let isDisplayMain = true;
+            /*  recherche principale par le champs de saisie  */
            if (inputNormalizeSearch.length >  2){                
-                /* recherche principale dans le titre et la description */
-                if ((normalizeText(recipe.name).includes(inputNormalizeSearch)) ||
-                    (normalizeText(recipe.description).includes(inputNormalizeSearch))  ){
-                    isDisplay = true;
+                /* recherche principale dans le titre  */
+                if (!(normalizeText(recipe.name).includes(inputNormalizeSearch))){
+                    isDisplayMain = false;
+                }else{
+                    isDisplayMain = true;
                 }
-                /* continuer la recherche principale si pas de trouvé à l'étape précèdente */
-                if (isDisplay == false) {
-                    /* recherche dans les ingrédients */
-                    for (const text of recipe.ingredients){
-                        if (normalizeText(text.ingredient).includes(inputNormalizeSearch)){
-                            isDisplay = true;
-                            /* sortie de la boucle en cas de trouvé  */
-                            break;
-                        }
-                    }                                
+                /* si pas de résultat, la recherche principale continue dans la
+                description   */
+                if (!isDisplayMain){
+                    if (!(normalizeText(recipe.description).includes(inputNormalizeSearch))){
+                        isDisplayMain = false;
+                    }else{
+                        isDisplayMain = true;
+                    }
+                    /* si pas de résultat, la recherche principale continue dans les
+                    ingrédients   */
+                    if (!isDisplayMain){
+                        for (const text of recipe.ingredients){
+                            if (normalizeText(text.ingredient).includes(inputNormalizeSearch)){
+                                isDisplayMain = true;
+                                /* sortie de la boucle en cas de trouvé  */
+                                break;
+                            }
+                        }  
+                    }
                 } 
             }
-
-            /*** à voir pour algo B d'utiliser tableau findIndex
-            *  à la place de la boucle for **** 
-            * 
-            * ou filter
-            * let array1 = ["noix et chocolat", "banane", "orange", "kiwi"];
-              let array2 = ["kiwi", "orange"];
-             console.log(array1.filter(e => array2.includes(e)));
-            * 
-            * */
-
+        
             /* champs avancé ingrédients  */
+            let isDisplayIngredient = true;
             if (ingredientTags.length > 0) {
-
-                for (const text of recipe.ingredients){
-                    for (const ingredient of ingredientTags ){
-                        if (normalizeText(text.ingredient).includes(normalizeText(ingredient))){
-                            isDisplay = true;
-                            /* sortie de la boucle en cas de trouvé  */
-                            break;
-                        }
-                    }
-                } 
-
-            //     for (const text of recipe.ingredients){  
-            //         ingredientList.push(text.ingredient);             
-                          
-            //     }
-            //    // console.log(ingredientList);
-            //     for (const ingredient of ingredientTags ){  
-            //             isDisplay = false ;                    
-            //         if (ingredientList.includes(ingredient)){
-            //             isDisplay = true;
-            //         }
-            //         if (!isDisplay){
-            //             break;
-            //         }
-            //     } 
-
-
-                // let ingredientsList = [];
-                // let ingredients = recipe[index].ingredients;
-                // ingredients.map(({ ingredient }) => {
-                //     ingredientsList.push(`${ingredient}`);
-                //     });
-                
-
-             /* Test  entre les tags Ingrédient et la recette */
-                // if (ingredientTags.length > 0) {
-                //     for (const tag of ingredientTags) {
-                //         if(recipe.ingredients.findIndex(list => list.ingredient.includes(tag)) == -1 && (isDisplay = false) ){
-                //             isDisplay = true;
-                //         }
-                //     };
-                // }
-            }
-                
-            /* champs avancé appareil    */
-            if (applianceTags.length > 0) {
-                for (const appliance of applianceTags){
-                    if (normalizeText(recipe.appliance).includes(normalizeText(appliance))){
-                        isDisplay = true;
-                        /* sortie de la boucle en cas de trouvé  */
-                        break;
+                let ingredientList = [];
+                /* récupérer tout les ingrédients de la recette dans un tableau   */
+                for (const ingredient of recipe.ingredients){   
+                    ingredientList.push(ingredient.ingredient.toLowerCase());
+                }
+                /* pour chaque ingredient selectionné, vérification
+                qu'il est présent dans les ingrédients de la recette  */
+                for (const ingredientTag of ingredientTags ){
+                    if (!ingredientList.includes(ingredientTag.toLowerCase())){
+                        isDisplayIngredient = false;
+                        break
+                    }else{
+                        isDisplayIngredient = true;
                     }
                 }
             }
-            /* champs avancé appareil    */
+
+              /* champs avancé appareil    */
+              let isDisplayAplliance = true;
+              if (applianceTags.length > 0) {               
+                  /* pour chaque appareil selectionné, vérification
+                  qu'il est présent dans l' appareil de la recette  */
+                  for (const applianceTag of applianceTags ){
+                      if (!recipe.appliance.toLowerCase().includes(applianceTag.toLowerCase())){
+                          isDisplayAplliance = false;
+                          /* si un ingrédient sélectionné n'est pas présent dans la liste des 
+                          ingrédients de la recette, fin de cette recherche  */
+                          break
+                        }else{
+                          isDisplayAplliance = true;
+                        }
+                    }
+                }
+                
+         
+            /* champs avancé ustensile    */
+            let isDisplayUstensil = true;
             if (ustensilTags.length > 0) {
-                for (const ustensilTag of ustensilTags){
-                    for (const ustensil of recipe.ustensils){
-                        if (normalizeText(ustensil).includes(normalizeText(ustensilTag))){
-                            isDisplay = true;
-                            /* sortie de la boucle en cas de trouvé  */
-                            break;
-                        }
-                    }                            
+                let ustensilList = recipe.ustensils.toLocaleString().toLowerCase().split(',')
+                /* pour chaque ustensils selectionné, vérification
+                qu'il est présent dans les ustensils de la recette  */
+                for (const ustensilTag of ustensilTags ){
+                    if (!ustensilList.includes(ustensilTag.toLowerCase())){
+                        isDisplayUstensil = false;
+                        break
+                    }else{
+                        isDisplayUstensil = true;
+                    }
                 }
             }
-            /* display true ou false pour chaque recette   */
-            currentLocalRecipes[index].display = isDisplay;
-            index++;  
 
+
+            /*en fonction résultat de ces 4 bloc, affichage ou non de la recette   */
+            isDisplay = isDisplayMain && isDisplayIngredient && isDisplayAplliance && isDisplayUstensil
+           
+             /* enregisterement mise à jour tableau recette display true/false dans le local
+            stockage du navigateur */
+            currentLocalRecipes[index].display = isDisplay;
+            index++;    
+            setLocalStorage(currentLocalRecipes);  
         }
-        /* enregisterement mise à jour tableau recette display true/false dans le local
-        stockage du navigateur */    
-        setLocalStorage(currentLocalRecipes);   
     }
 
-    /* mise à jour et affichage des recettes et des champs avancés  */
-
-    IngredientsListMenu();
-    applianceListMenu();
-    ustensilsListMenu();
+    /* affichage des recettes et des champs avancés modifié(s)  */
+    displayRecipe();
     ingredientsMenuDisplay();
     appliancesMenuDisplay();
-    ustensilsMenuDisplay();
-    displayRecipe();
+    ustensilsMenuDisplay();    
     displayTags();
     
 }
@@ -779,7 +767,7 @@ export function showTag(id,name,currentTag) {
     
 /*  structure éléments de recherche avancé par les saisies input avancé   */
 export function showItemsAdvanced(ingredientName) {
-    let current = `<div class="filterItem">${ingredientName}</div>`
+    let current = `<p class="filterItem">${ingredientName}</p>`
     return current;
 }
 
@@ -829,7 +817,11 @@ export function normalizeText(text){
     .replace(/[.,;:!\?\*"()°]/g, "")
 }
 
-
+/* mettre la première lettre en majuscule pour une chaîne de caractère  */
+export function capitalize(sentence)
+{
+    return sentence && sentence[0].toUpperCase() + sentence.slice(1);
+}
 
 
 

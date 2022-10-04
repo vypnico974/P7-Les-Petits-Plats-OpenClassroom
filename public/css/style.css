@@ -136,7 +136,17 @@ input[type="text"]{
     align-items: center;
     width: 180px;
     cursor: pointer;
+    margin: 0;
 }
+.filterItem p::first-letter {
+    text-transform: uppercase;
+  
+}
+.filterItem p {
+    margin: 0;
+  
+}
+
 
 #filterIngredients.show, #filterAppliances.show, #filterUstensils.show{
     border-bottom-left-radius: 0px;
