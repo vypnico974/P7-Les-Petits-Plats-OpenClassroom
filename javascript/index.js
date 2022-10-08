@@ -1,5 +1,5 @@
 import {getRecipes, setLocalStorage} from "./dataConnection.js";
-import {applianceListMenu, appliancesMenuDisplay, displayRecipe, IngredientsListMenu, ingredientsMenuDisplay, ListenersLoad, ustensilsListMenu, ustensilsMenuDisplay } from "./utils.js";
+import {appliancesMenuDisplay, displayRecipe, ingredientsMenuDisplay, ListenersLoad,ustensilsMenuDisplay } from "./utils.js";
 
 
 
@@ -8,15 +8,13 @@ async function initPage(){
   /* enregistrer tout les recettes display true dans le local stockage
   du navigateur à l'initialisation de la page  */
   setLocalStorage(recipes);
- 
-
+ /* création des écouteurs d'évènements  */
   ListenersLoad();
- // IngredientsListMenu();
- // applianceListMenu();
- // ustensilsListMenu();
+  /* affichage des menus filtres ingrédients/appareils/ustensiles  */
   ingredientsMenuDisplay();
   appliancesMenuDisplay();
   ustensilsMenuDisplay();
+  /* affichage toute les recettes  */
   displayRecipe();
 }
 
@@ -24,8 +22,3 @@ async function initPage(){
 
 
 initPage();
-/*
-const text = [1,2,3];
-setLocalStorage(text);
-const toto = getLocalStorage()
-console.log(toto); */
