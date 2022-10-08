@@ -108,9 +108,9 @@ export function ustensilsListMenu(){
  */
 export function displayRecipe(){
     const recipes = getLocalStorage();
-    console.time("trie-sort");
-    const recipesSortName = sortByName(recipes);
-    console.timeEnd("trie-sort");
+    console.time("trie-quick_sort");
+    const recipesSortName = quickSort(recipes);
+    console.timeEnd("trie-quick_sort");
     const dom = document.querySelector("#div-recipes");
     const message = document.querySelector("#div-message");
     let content = ""; /* pour structure card  */
@@ -547,12 +547,13 @@ export function evenTag(action,nameList,item){
 }
 
 
-/**en cours............ ALGO A boucle native FOR
+/**en cours............ ALGO 2 méthodes de l'objet array
  *  actions des filtres pour trouver le(s) recette(s) */
 export function actionFilters(){
+    console.time("algo2");
     let index = 0;
-    let currentLocalRecipes= sortByName(getLocalStorage());
-    let isDisplay = "";
+    let isDisplay = true;
+    let currentLocalRecipes= getLocalStorage();
     let inputSearch = document.getElementById("search-input").value;
     /*normalizeText : Unicode norme NFD, supprime certaines poncutations,...   */
     let inputNormalizeSearch = normalizeText(inputSearch);    
@@ -560,7 +561,7 @@ export function actionFilters(){
     if (inputNormalizeSearch.length < 3) {
         inputNormalizeSearch = "";
     }
-     /* Si aucun filtre appliqué, affichage de toutes les recettes */
+    /* Si aucun filtre appliqué, affichage de toutes les recettes */
     if (inputNormalizeSearch == "" && 
         ingredientTags.length == 0 &&
         applianceTags.length == 0 &&
@@ -568,166 +569,59 @@ export function actionFilters(){
         for (const recipe of currentLocalRecipes){
             recipe.display = true;
         }
-        /* la mis à jour display à true  pour toutes les recettes est sauvegardée dans
-         le stockage local du navigateur */
-        setLocalStorage(currentLocalRecipes);
     }
     else{
-       /*  recherche pour chaque recette  */
-        for (const recipe of currentLocalRecipes) {
-            /* 4 bloc de recherches : une recherche principale par le champs recherche une recette
-            et les 3 trois champs avancés (ingrédient/appareil/ustensile)
-            en fonctions résultat de ces 4 blocs, affichage ou pas de la recette */
-            let isDisplayMain = true;
-            /*  recherche principale   */
-            /* début de la recherche à partir de 3 caractères    */
-           if (inputNormalizeSearch.length >  2){                
-                /* recherche principale dans le titre  */
-                if (!(normalizeText(recipe.name).includes(inputNormalizeSearch))){
-                    isDisplayMain = false;
-                }
-                /* si pas de résultat, la recherche principale continue dans la
-                description   */
-                if (!isDisplayMain){
-                    if (!(normalizeText(recipe.description).includes(inputNormalizeSearch))){
-                        isDisplayMain = false;
-                    }else{
-                        isDisplayMain = true;
-                    }
-                    /* si pas de résultat, la recherche principale continue dans les
-                    ingrédients   */
-                    if (!isDisplayMain){
-                        for (const text of recipe.ingredients){
-                            if (normalizeText(text.ingredient).includes(inputNormalizeSearch)){
-                                isDisplayMain = true;
-                                /* sortie de la boucle en cas de trouvé  */
-                                break;
-                            }
-                        }  
-                    }
-                } 
-            }        
-            /* champs avancé ingrédients  */
-            let isDisplayIngredient = true;
-            if (ingredientTags.length > 0) {
-                let ingredientList = [];
-                /* récupérer tout les ingrédients de la recette dans un tableau   */
-                for (const ingredient of recipe.ingredients){   
-                    ingredientList.push(normalizeText(ingredient.ingredient));
-                }
-                 /* pour chaque ingrédient selectionné, vérification qu'il est présent dans
-                 les ingrédients de la recette, si non présent, fin de la recherche pour ce
-                 champs sélectionné et la recette ne sera pas affiché */
-                for (const ingredientTag of ingredientTags ){                    
-                    if (!ingredientList.includes(normalizeText(ingredientTag))){
-                        isDisplayIngredient = false;
-                        break 
-                    }
-                }
-            }
-             /* champs avancé appareil    */
-            let isDisplayAplliance = true;
-            if (applianceTags.length > 0) {               
-                /* pour chaque appareil selectionné, vérification qu'il est présent pour
-                l'appareil de la recette, si non présent, fin de la recherche pour ce
-                champs sélectionné et la recette ne sera pas affiché */
-                for (const applianceTag of applianceTags ){
-                    if (! normalizeText(recipe.appliance).includes(normalizeText(applianceTag))){
-                        isDisplayAplliance = false;
-                        break
-                    }
-                }
-            }
-            /* champs avancé ustensile    */
-            let isDisplayUstensil = true;
-            if (ustensilTags.length > 0) {
-                let ustensilList = recipe.ustensils.toLocaleString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(',');
-                /* pour chaque ustensil selectionné, vérification qu'il est présent dans
-                 les ustensiels de la recette, si non présent, fin de la recherche pour ce
-                 champs sélectionné et la recette ne sera pas affiché */
-                for (const ustensilTag of ustensilTags ){
-                    if (!ustensilList.includes(ustensilTag.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
-                        isDisplayUstensil = false;
-                        break
-                    }
-                }
-            }
-            /*en fonction résultat de ces 4 bloc, affichage ou non de la recette   */
-            isDisplay = isDisplayMain && isDisplayIngredient && isDisplayAplliance && isDisplayUstensil
-            /* display true/false pour la recette */
-            currentLocalRecipes[index].display = isDisplay;
-            index++;  
-        }
-        /* enregisterement de la mise à jour tableau recette display true/false dans le local
-        stockage du navigateur */
-        setLocalStorage(currentLocalRecipes);
-    }
-    console.timeEnd("algo1"); /* fin mesure du temps d'exécution de l'algo 1    */ 
-
-   /********** ALGO 2 TEST *******************************/
-    
-    console.time("algo2");
-    
-   // console.log(currentLocalRecipes);
-   
-     /* Si aucun filtre appliqué, affichage de toutes les recettes */
-    if (inputNormalizeSearch == "" && 
-    ingredientTags.length == 0 &&
-    applianceTags.length == 0 &&
-    ustensilTags.length == 0) {         
-    for (const recipe of currentLocalRecipes){
-         recipe.display = true;
-     }
-     /*   présentation résultat algo_2 en affichage à faire l'enregistrement sur la branche
-     algo2 après les tests de vérifications */
-     console.log("Résultat algo_2 :",currentLocalRecipes )
-     }
-    else{
-        let isDisplayRecipeArray = []
+        /* mettre la saisie du champs de recherche principal dans un tableau
+        pour utiliser les méthodes array */
         let inputSearchArray = [];
         inputSearchArray.push(inputNormalizeSearch);
-        isDisplayRecipeArray = currentLocalRecipes.filter(recipe => {
-            return (
-                inputSearchArray.every(
-                    (text) =>
-                    normalizeText(recipe.description).includes(text) ||
-                    normalizeText(recipe.name).includes(text) ||
-                    recipe.ingredients
-                    .map((ingredient) => normalizeText(ingredient.ingredient))
-                    .join(' ')
-                    .includes(text)
-                ) &&    (
-                    ingredientTags.every((ingredientTag) =>
+        /* pour les 4 bloc de recherche (principal et mot clés ingrédient/appareil/ustensile) 
+        si rendre dans le bloc de recherche valeur true en sortie en cas de correspondance
+        si un des 4 bloc retourne false en cas de non correspondance, la recette ne sera pas affiché */
+        currentLocalRecipes.forEach(recipe => {
+        
+        isDisplay = inputSearchArray.every(
+            (text) =>
+                normalizeText(recipe.description).includes(text) ||
+                normalizeText(recipe.name).includes(text) ||
+                recipe.ingredients
+                .map((ingredient) => normalizeText(ingredient.ingredient))
+                .join(' ')
+                .includes(text)
+            ) && (
+                ingredientTags.every((ingredientTag) =>
                     recipe.ingredients
                     .map((ingredient) =>
                     normalizeText(ingredient.ingredient)
-                    )
-                    .includes(normalizeText(ingredientTag)))
-                ) && (
-                    applianceTags.every(
-                    (applianceTag) =>
-                    normalizeText(recipe.appliance) === normalizeText(applianceTag)
-                    )
-                ) && (
-                    ustensilTags.every((ustensilTag) =>
-                    recipe.ustensils
-                    .map((ustensil) => normalizeText(ustensil))
-                    .includes(normalizeText(ustensilTag))
-                    )
-                )    
+                )
+                .includes(normalizeText(ingredientTag)))
+            ) && (
+                applianceTags.every(
+                (applianceTag) =>
+                normalizeText(recipe.appliance) === normalizeText(applianceTag)
             )
-        })
-        /* uniquement affichage resultat algo_2 à faire l'enregistrement pour
-        la banche algo2   */
-        console.time("trie-quick sort");
-        console.log("résultat algo_2", quickSort(isDisplayRecipeArray));
-        console.timeEnd("trie-quick sort");
-        console.timeEnd("algo2");
+            ) && (
+                ustensilTags.every((ustensilTag) =>
+                recipe.ustensils
+                .map((ustensil) => normalizeText(ustensil))
+                .includes(normalizeText(ustensilTag))
+                )
+            ) 
+            /* mis à jour du champs display à true ou false de chaque recette
+            du tableau recette  */
+            currentLocalRecipes[index].display = isDisplay;
+            index++;
+        });   
+           
     }
+     /* enregister le tableau des recettes à jour pour l'affichage dans le local
+    stockage du navigateur  */
+    setLocalStorage(currentLocalRecipes)
+    console.timeEnd("algo2");
     
 
 
-    /* affichage des recettes et des champs avancés modifié(s)  */
+    /* affichage mise à jour des recettes et des listes ingredient/appareil/ustensile  */
     displayRecipe();
     ingredientsMenuDisplay();
     appliancesMenuDisplay();
@@ -851,21 +745,21 @@ export function normalizeText(text){
 
 /** 
  * algorithme Le tri rapide (quicksort)  ou tri pivot pour le tableau des recettes
- *  Son fonctionnement est centré autour du concept du pivot
+ * Le principe de fonctionnement est basé sur le concept du pivot
  * @param {*} tableau non trié
  * @return {*} tableau trié*/ 
 export function quickSort(recipes) {
-    // stop boucle si reste 1 seul element
+    /* stop boucle si reste 1 seul element */
     if (recipes.length < 2) return recipes;
-    // valeur pivot
+    /* valeur pivot */
     let pivot = recipes[0];
-    // sous-tableau elements < pivot
+    /* sous-tableau elements < pivot */
     let lesser = [];
-    // sous-taleau elements > pivot
+    /*  sous-taleau elements > pivot */
     let greater = [];
-    // boucle sur tableau recettes
+    /*  boucle sur tableau recettes */
     for (let i = 1; i < recipes.length; i++) {
-      // quick sort sur noms recettes
+      /*  quick sort sur noms recettes */
       if (recipes[i].name > pivot.name) greater.push(recipes[i]);
       else lesser.push(recipes[i]);
     }
@@ -874,49 +768,3 @@ export function quickSort(recipes) {
   }
 
 
-// export function mergeSort(array){   
-//         // divide array until there's only one element
-//         // the recursive stop condition !
-//         if (array.length > 1) {
-//           // get the middle index of the current division
-//           const middleIndex = Math.floor(array.length / 2)
-//           // get left side
-//           const leftSide = array.slice(0, middleIndex)
-//           // get right side
-//           const rightSide = array.slice(middleIndex)
-//           // call recursively for the left part of the data
-//           mergeSort(leftSide)
-//           // call recursively for the right part of the data
-//           mergeSort(rightSide)
-//           // default setup of the indexes
-//           let leftIndex = 0, rightIndex = 0, globalIndex = 0
-//           // loop until we reach the end of the left or the right array
-//           // we can't compare if there is only one element
-//           while(leftIndex > leftSide.length && rightIndex > rightSide.length) {
-//             // actual sort comparaison is here
-//             // if the left element is smaller its should be first in the array
-//             // else the right element should be first
-//             // move indexes at each steps
-//             if (leftSide[leftIndex] < rightSide[rightIndex]) {
-//               array[globalIndex] = leftSide[leftIndex]
-//               leftIndex++
-//             } else {
-//               array[globalIndex] = rightSide[rightIndex]
-//               rightIndex++
-//             }
-//             globalIndex++
-//           }
-//           // making sure that any element was not left behind during the process
-//           while(leftIndex < leftSide.length) {
-//             array[globalIndex] = leftSide[leftIndex]
-//             leftIndex++
-//             globalIndex++
-//           }
-//           while(rightIndex < rightSide.length) {
-//             array[globalIndex] = rightSide[rightIndex]
-//             rightIndex++
-//             globalIndex++
-//           }
-//         }
-//         return array 
-// }
