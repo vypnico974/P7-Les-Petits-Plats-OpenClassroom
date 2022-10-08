@@ -565,10 +565,11 @@ export function evenTag(action,nameList,item){
 }
 
 
-/**en cours............ ALGO A boucle native FOR
+/**en cours....... ALGO A boucle native FOR
  *  actions des filtres pour trouver le(s) recette(s) */
 export function actionFilters(){
     let index = 0;
+    
     let currentLocalRecipes= sortByName(getLocalStorage());
     let isDisplay = "";
     let inputSearch = document.getElementById("search-input").value;
