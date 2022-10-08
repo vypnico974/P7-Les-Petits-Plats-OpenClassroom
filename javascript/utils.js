@@ -557,8 +557,7 @@ export function actionFilters(){
     let inputSearch = document.getElementById("search-input").value;
     let index = 0;
     /*normalizeText : Unicode norme NFD, supprime certaines poncutations,...   */
-    let inputNormalizeSearch = normalizeText(inputSearch);
-    
+    let inputNormalizeSearch = normalizeText(inputSearch);    
  
     if (inputNormalizeSearch.length < 3) {
         inputNormalizeSearch = "";
@@ -667,32 +666,7 @@ export function actionFilters(){
     }
     console.timeEnd("algo1"); /* fin mesure du temps d'exécution de l'algo 1    */ 
 
-
-
-// let allRecipes = getLocalStorage()
-// let filteredRecipes = []
-
-//  let recipeTextFilter = ['citron']
-// // let recipeTextFilter = ['coco', 'citron']
-// // let recipeTextFilter = ['citron', 'coco', 'couteau', 'poisson', 'verre', 'ananas']
-
-// filteredRecipes = allRecipes.filter((recipe) => {
-//     return recipeTextFilter.every(
-//         (word) =>
-//             recipe.description.toLowerCase().includes(word) ||
-//             recipe.name.toLowerCase().includes(word) ||
-//             recipe.ingredients
-//                 .map((ingredient) => ingredient.ingredient)
-//                 .join(' ')
-//                 .toLowerCase()
-//                 .includes(word)
-//     )
-// })
-
-// console.log(filteredRecipes)
-
-
-    /********** ALGO 2 TEST *******************************/
+   /********** ALGO 2 TEST *******************************/
     
     console.time("algo2");
     
@@ -706,9 +680,9 @@ export function actionFilters(){
     for (const recipe of currentLocalRecipes){
          recipe.display = true;
      }
-     /* mis à jour tout display à true des recettes dans
-      le stockage local du navigateur */
-     setLocalStorage(currentLocalRecipes);
+     /*   présentation résultat algo_2 en affichage à faire l'enregistrement sur la branche
+     algo2 après les tests de vérifications */
+     console.log("Résultat algo_2 :",currentLocalRecipes )
      }
     else{
         let isDisplayRecipeArray = []
@@ -718,134 +692,39 @@ export function actionFilters(){
             return (
                 inputSearchArray.every(
                     (text) =>
-                        normalizeText(recipe.description).includes(text) ||
-                        normalizeText(recipe.name).includes(text) ||
-                        recipe.ingredients
-                            .map((ingredient) => normalizeText(ingredient.ingredient))
-                            .join(' ')
-                            .includes(text)
+                    normalizeText(recipe.description).includes(text) ||
+                    normalizeText(recipe.name).includes(text) ||
+                    recipe.ingredients
+                    .map((ingredient) => normalizeText(ingredient.ingredient))
+                    .join(' ')
+                    .includes(text)
                 ) &&    (
                     ingredientTags.every((ingredientTag) =>
                     recipe.ingredients
                     .map((ingredient) =>
-                        normalizeText(ingredient.ingredient)
+                    normalizeText(ingredient.ingredient)
                     )
                     .includes(normalizeText(ingredientTag)))
                 ) && (
                     applianceTags.every(
-                        (applianceTag) =>
-                        normalizeText(recipe.appliance) === normalizeText(applianceTag)
+                    (applianceTag) =>
+                    normalizeText(recipe.appliance) === normalizeText(applianceTag)
                     )
-
                 ) && (
                     ustensilTags.every((ustensilTag) =>
                     recipe.ustensils
-                        .map((ustensil) => normalizeText(ustensil))
-                        .includes(normalizeText(ustensilTag))
+                    .map((ustensil) => normalizeText(ustensil))
+                    .includes(normalizeText(ustensilTag))
                     )
                 )    
             )
         })
+        /* uniquement affichage resultat algo_2 à faire l'enregistrement pour
+        la banche algo2   */
         console.time("trie-quick sort");
-        console.log("resultat algo2 :", quickSort(isDisplayRecipeArray));
+        console.log("résultat algo_2", quickSort(isDisplayRecipeArray));
         console.timeEnd("trie-quick sort");
         console.timeEnd("algo2");
-
-
-        // index = 0;
-        // currentLocalRecipes.forEach(recipe => {
-        //     ingredientsList = [];
-        //     ustensilList = []
-        //     isDisplayMainAlgo2 = true;
-        //     isDisplayIngredientAlgo2 = true;
-        //     isDisplayApplianceAlgo2 = true;
-        //     isDisplayUstensilAlgo2 = true;         
-            
-        //     // if (inputNormalizeSearch.length >  2){ 
-
-        //     //     let inputSearchArray = [];
-        //     //     inputSearchArray.push(inputNormalizeSearch);
-        //     //     isDisplayMainAlgo2 = inputSearchArray.every(
-        //     //         (text) =>
-        //     //             normalizeText(recipe.description).includes(text) ||
-        //     //             normalizeText(recipe.name).includes(text) ||
-        //     //             recipe.ingredients
-        //     //                 .map((ingredient) => normalizeText(ingredient.ingredient))
-        //     //                 .join(' ')
-        //     //                 .includes(text)
-        //     //     )
-        //     //     //console.log(inputNormalizeSearch,isDisplayMainAlgo2 );
-          
-        //     // }
-
-        //     isDisplayIngredientAlgo2 = true;
-        //     /* champs avancé ingrédients  */           
-        //     if (ingredientTags.length > 0) {  
-        //             recipe.ingredients.map(({ ingredient }) => {
-        //             ingredientsList.push(normalizeText(`${ingredient}`));
-        //             })        
-        //         ingredientTags.forEach(tag => {
-        //             if (!ingredientsList.includes(normalizeText(tag))){
-        //                 isDisplayIngredientAlgo2 = false;
-        //             } 
-        //         })
-
-        //         isDisplayIngredientAlgo2 = ingredientTags.every((ingredientTag) =>
-        //         recipe.ingredients
-        //             .map((ingredient) =>
-        //                 normalizeText(ingredient.ingredient)
-        //             )
-        //             .includes(normalizeText(ingredientTag)) 
-        //         )
-        //     }
-
-        //     isDisplayApplianceAlgo2 = true;
-        //     /* champs avancé appareils  */              
-        //     if (applianceTags.length > 0) {                  
-        //         applianceTags.forEach(tag => {
-        //             if (!normalizeText(recipe.appliance).includes(normalizeText(tag))){
-        //                isDisplayApplianceAlgo2 = false;
-        //             } 
-        //         })
-        //     }
-
-        //     isDisplayApplianceAlgo2 =applianceTags.every(
-        //         (applianceTag) =>
-        //         normalizeText(recipe.appliance) === normalizeText(applianceTag)
-        //     )
-
-            
-        //     isDisplayUstensilAlgo2 = true
-        //     /* champs avancé ustensils  */           
-        //     if (ustensilTags.length > 0) {                  
-        //         ustensilList = recipe.ustensils.toLocaleString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(',') ;                              
-        //         ustensilTags.forEach(tag => {
-        //             if (!ustensilList.includes(tag.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))){
-        //                 isDisplayUstensilAlgo2 = false;
-        //             } 
-        //         })
-        //     }
-
-        //     isDisplayUstensilAlgo2 =ustensilTags.every((ustensilTag) =>
-        //             recipe.ustensils
-        //                 .map((ustensil) => normalizeText(ustensil))
-        //                 .includes(normalizeText(ustensilTag))
-        //     )
-
-
-        //     isDisplay =  isDisplayMainAlgo2 && isDisplayIngredientAlgo2 && isDisplayApplianceAlgo2 && isDisplayUstensilAlgo2
-            
-        //     /* enregisterement mise à jour tableau recette display true/false dans le local
-        //     stockage du navigateur */
-        //    //currentLocalRecipes[index].display = isDisplay;
-        //     index++;    
-        //    // setLocalStorage(currentLocalRecipes); 
-
-        // });
-
-
-
-
     }
     
 
@@ -859,7 +738,7 @@ export function actionFilters(){
     
 }
 
-/* affichage des tag provenants des champs avancés ingrédients/appareils/ustensiles */
+/* affichage des tag champs avancés ingrédients/appareils/ustensiles */
 export function displayTags(){
     let indexTagId = 0;
     let tagsList = "";
