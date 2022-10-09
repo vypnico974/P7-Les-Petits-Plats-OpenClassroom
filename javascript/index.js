@@ -5,7 +5,7 @@ import {appliancesMenuDisplay, displayRecipe, ingredientsMenuDisplay, ListenersL
 
 async function initPage(){
   const recipes = await getRecipes();
-  /* enregistrer tout les recettes display true dans le local stockage
+  /* enregistrer toutes les recettes display true dans le local stockage
   du navigateur à l'initialisation de la page  */
   setLocalStorage(recipes);
  /* création des écouteurs d'évènements  */
@@ -14,7 +14,7 @@ async function initPage(){
   ingredientsMenuDisplay();
   appliancesMenuDisplay();
   ustensilsMenuDisplay();
-  /* affichage toute les recettes  */
+  /* affichage toutes les recettes  */
   displayRecipe();
 }
 
