@@ -18,7 +18,4 @@ async function initPage(){
   displayRecipe();
 }
 
-
-
-
 initPage();

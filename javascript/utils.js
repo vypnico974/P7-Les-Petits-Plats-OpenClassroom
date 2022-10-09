@@ -546,13 +546,11 @@ export function evenTag(action,nameList,item){
 
 }
 
-
+ /******  ALGO 1 -- boucle native FOR ***************/
 /* actions des filtres pour trouver recette(s) */
 export function actionFilters(){
-    /******  ALGO 1 -- boucle native FOR ***************/
     console.time("algo1"); /* debut mesure du temps d'exécution de l'algo 1    */    
     let currentLocalRecipes= getLocalStorage();
-    //console.log(currentLocalRecipes);    
     let isDisplay = "";
     let inputSearch = document.getElementById("search-input").value;
     let index = 0;
@@ -570,9 +568,6 @@ export function actionFilters(){
         for (const recipe of currentLocalRecipes){
             recipe.display = true;
         }
-        /* la mis à jour display à true  pour toutes les recettes est sauvegardée dans
-         le stockage local du navigateur */
-        setLocalStorage(currentLocalRecipes);
     }
     else{
        /*  recherche pour chaque recette  */
@@ -617,9 +612,9 @@ export function actionFilters(){
                 for (const ingredient of recipe.ingredients){   
                     ingredientList.push(normalizeText(ingredient.ingredient));
                 }
-                 /* pour chaque ingrédient selectionné, vérification qu'il est présent dans
-                 les ingrédients de la recette, si non présent, fin de la recherche pour ce
-                 champs sélectionné et la recette ne sera pas affiché */
+                /* pour chaque ingrédient selectionné, vérification qu'il est présent dans
+                les ingrédients de la recette, si non présent, fin de la recherche pour ce
+                champs sélectionné et la recette ne sera pas affiché */
                 for (const ingredientTag of ingredientTags ){                    
                     if (!ingredientList.includes(normalizeText(ingredientTag))){
                         isDisplayIngredient = false;
@@ -660,74 +655,11 @@ export function actionFilters(){
             currentLocalRecipes[index].display = isDisplay;
             index++;  
         }
-        /* enregisterement de la mise à jour tableau recette display true/false dans le local
-        stockage du navigateur */
-        setLocalStorage(currentLocalRecipes);
     }
+    /* enregisterement de la mise à jour tableau recette display true/false dans le local
+    stockage du navigateur */
+    setLocalStorage(currentLocalRecipes);
     console.timeEnd("algo1"); /* fin mesure du temps d'exécution de l'algo 1    */ 
-
-   /********** ALGO 2 TEST *******************************/
-    
-    console.time("algo2");
-    
-   // console.log(currentLocalRecipes);
-   
-     /* Si aucun filtre appliqué, affichage de toutes les recettes */
-    if (inputNormalizeSearch == "" && 
-    ingredientTags.length == 0 &&
-    applianceTags.length == 0 &&
-    ustensilTags.length == 0) {         
-    for (const recipe of currentLocalRecipes){
-         recipe.display = true;
-     }
-     /*   présentation résultat algo_2 en affichage à faire l'enregistrement sur la branche
-     algo2 après les tests de vérifications */
-     console.log("Résultat algo_2 :",currentLocalRecipes )
-     }
-    else{
-        let isDisplayRecipeArray = []
-        let inputSearchArray = [];
-        inputSearchArray.push(inputNormalizeSearch);
-        isDisplayRecipeArray = currentLocalRecipes.filter(recipe => {
-            return (
-                inputSearchArray.every(
-                    (text) =>
-                    normalizeText(recipe.description).includes(text) ||
-                    normalizeText(recipe.name).includes(text) ||
-                    recipe.ingredients
-                    .map((ingredient) => normalizeText(ingredient.ingredient))
-                    .join(' ')
-                    .includes(text)
-                ) &&    (
-                    ingredientTags.every((ingredientTag) =>
-                    recipe.ingredients
-                    .map((ingredient) =>
-                    normalizeText(ingredient.ingredient)
-                    )
-                    .includes(normalizeText(ingredientTag)))
-                ) && (
-                    applianceTags.every(
-                    (applianceTag) =>
-                    normalizeText(recipe.appliance) === normalizeText(applianceTag)
-                    )
-                ) && (
-                    ustensilTags.every((ustensilTag) =>
-                    recipe.ustensils
-                    .map((ustensil) => normalizeText(ustensil))
-                    .includes(normalizeText(ustensilTag))
-                    )
-                )    
-            )
-        })
-        /* uniquement affichage resultat algo_2 à faire l'enregistrement pour
-        la banche algo2   */
-        console.time("trie-quick sort");
-        console.log("résultat algo_2", quickSort(isDisplayRecipeArray));
-        console.timeEnd("trie-quick sort");
-        console.timeEnd("algo2");
-    }
-    
-
 
     /* affichage des recettes et des champs avancés modifié(s)  */
     displayRecipe();
@@ -850,75 +782,3 @@ export function normalizeText(text){
 }
 
 
-
-/** 
- * algorithme Le tri rapide (quicksort)  ou tri pivot pour le tableau des recettes
- *  Son fonctionnement est centré autour du concept du pivot
- * @param {*} tableau non trié
- * @return {*} tableau trié*/ 
-export function quickSort(recipes) {
-    // stop boucle si reste 1 seul element
-    if (recipes.length < 2) return recipes;
-    // valeur pivot
-    let pivot = recipes[0];
-    // sous-tableau elements < pivot
-    let lesser = [];
-    // sous-taleau elements > pivot
-    let greater = [];
-    // boucle sur tableau recettes
-    for (let i = 1; i < recipes.length; i++) {
-      // quick sort sur noms recettes
-      if (recipes[i].name > pivot.name) greater.push(recipes[i]);
-      else lesser.push(recipes[i]);
-    }
-    // fusion des 2 sous-tableaux
-    return quickSort(lesser).concat(pivot, quickSort(greater));
-  }
-
-
-// export function mergeSort(array){   
-//         // divide array until there's only one element
-//         // the recursive stop condition !
-//         if (array.length > 1) {
-//           // get the middle index of the current division
-//           const middleIndex = Math.floor(array.length / 2)
-//           // get left side
-//           const leftSide = array.slice(0, middleIndex)
-//           // get right side
-//           const rightSide = array.slice(middleIndex)
-//           // call recursively for the left part of the data
-//           mergeSort(leftSide)
-//           // call recursively for the right part of the data
-//           mergeSort(rightSide)
-//           // default setup of the indexes
-//           let leftIndex = 0, rightIndex = 0, globalIndex = 0
-//           // loop until we reach the end of the left or the right array
-//           // we can't compare if there is only one element
-//           while(leftIndex > leftSide.length && rightIndex > rightSide.length) {
-//             // actual sort comparaison is here
-//             // if the left element is smaller its should be first in the array
-//             // else the right element should be first
-//             // move indexes at each steps
-//             if (leftSide[leftIndex] < rightSide[rightIndex]) {
-//               array[globalIndex] = leftSide[leftIndex]
-//               leftIndex++
-//             } else {
-//               array[globalIndex] = rightSide[rightIndex]
-//               rightIndex++
-//             }
-//             globalIndex++
-//           }
-//           // making sure that any element was not left behind during the process
-//           while(leftIndex < leftSide.length) {
-//             array[globalIndex] = leftSide[leftIndex]
-//             leftIndex++
-//             globalIndex++
-//           }
-//           while(rightIndex < rightSide.length) {
-//             array[globalIndex] = rightSide[rightIndex]
-//             rightIndex++
-//             globalIndex++
-//           }
-//         }
-//         return array 
-// }

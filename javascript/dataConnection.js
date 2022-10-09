@@ -17,18 +17,15 @@ export async function getRecipes() {
         console.log("Une erreur se produit :", err);   
     }       
 }
-
 /* extrait le tableau text de l'objet data et l'enregistrer dans le stockage local du navigateur   */
 export function setLocalStorage(data){
     const dataText = JSON.stringify(data);
     window.localStorage.setItem("recipesStorage",dataText);
-
 }
 /* récupérer le tableau text des data depuis le stockage local du navigateur */
 export function getLocalStorage(){
    const response = window.localStorage.getItem("recipesStorage");
-   return JSON.parse(response);
-    
+   return JSON.parse(response);    
 }
 
 
