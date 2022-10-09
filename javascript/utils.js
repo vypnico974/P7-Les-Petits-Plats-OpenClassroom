@@ -582,12 +582,12 @@ export function actionFilters(){
         
         isDisplay = inputSearchArray.every(
             (text) =>
-                normalizeText(recipe.description).includes(text) ||
-                normalizeText(recipe.name).includes(text) ||
+                normalizeText(recipe.description).includes(normalizeText(text)) ||
+                normalizeText(recipe.name).includes(normalizeText(text)) ||
                 recipe.ingredients
                 .map((ingredient) => normalizeText(ingredient.ingredient))
                 .join(' ')
-                .includes(text)
+                .includes(normalizeText(text))
             ) && (
                 ingredientTags.every((ingredientTag) =>
                     recipe.ingredients
