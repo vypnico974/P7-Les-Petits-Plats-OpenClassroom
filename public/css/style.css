@@ -73,7 +73,8 @@ header img{
     top: 15px;
     right: 15px;
 }
-/** partie menus filtres   **/input[type="text"]{
+/** partie menus filtres   **/
+    input[type="text"]{
     min-height: 65px;
     color: white;
     border: none;
@@ -121,14 +122,15 @@ header img{
     cursor: pointer;
     margin: 0;
 }
+.filterItem p:hover{
+    font-weight: 800;
+    transform: scale(1.08); 
+}
 .filterItem p::first-letter { /* première lettre en majuscule */
     text-transform: uppercase;  
 }
 .filterItem p {
     margin: 0;  
-}
-#ingredientsList+p::first-letter {
-    text-transform: uppercase;
 }
 #filterIngredients.show, #filterAppliances.show, #filterUstensils.show{
     border-bottom-left-radius: 0px;
@@ -160,6 +162,9 @@ header img{
 .div-arrow{
     display: flex;
     width: 15px;
+}
+.div-arrow:hover{
+    transform: scale(2);  
 }
 .show .filterList{
     width: 100%;
@@ -210,10 +215,6 @@ header img{
     transform: scale(1.03);
 }
 @media all and (max-width: 750px) {
-    /*
-    #div-recipes {
-      justify-content: center;
-    } */
     .card-recipe{
         width: 370px;  
         margin-bottom: 20px;

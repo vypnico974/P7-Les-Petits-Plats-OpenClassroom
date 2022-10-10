@@ -1,113 +1,88 @@
 import {getLocalStorage, setLocalStorage} from "./dataConnection.js";
 
-
 /* Tableaux des tags */
 let ingredientTags = [];
 let applianceTags = [];
 let ustensilTags = [];
 
-
-export function IngredientsListMenu(){
-    /* récupérer le tableau recette sauvegarder dans le local stockage du navigateur  */
-    let recipesData = getLocalStorage();
+export function IngredientsListMenu(recipes){
     let recipesDataTrue = [];
     let ingredientsList = [];
-    let TestArrayIngredient = [];
-    /* sélectionne les recettes à display true   */
-    for (const recipe of recipesData){
-        if (recipe.display){
-            recipesDataTrue.push(recipe);  
-            TestArrayIngredient.push(recipe);            
-        }
+    if (!recipes) {
+        recipes = getLocalStorage()
     }
+    /* récupérer les recettes à display true  */
+    recipesDataTrue = recipeTrue(recipes)
     /*  enregistrer les ingrédients en minuscule dans une liste et par CSS
     mettre la première lettre en majuscule    */
-    for (let index = 0; index < recipesDataTrue.length; index++) {
-        let ingredients = recipesDataTrue[index].ingredients;
+    recipesDataTrue.forEach(recipe => {
+        let ingredients = recipe.ingredients;
         ingredients.map(({ ingredient }) => {
-        ingredientsList.push(`${ingredient}`.toLowerCase());
-        });
-    }
+            ingredientsList.push((ingredient.toLowerCase()));
+            });
+    })
     /* pas de doublon */
     const ingredientsListUniqueSet = new Set(ingredientsList);
     /* convertir en tableau */
     const ingredientsListUnique = [...ingredientsListUniqueSet] 
-    /* Tri avec la méthode sort() et localeCompare() nécessaire
-    pour les accent et les majuscules */
-    const sortedArray = ingredientsListUnique.sort(function (a, b) {
-         return a.localeCompare(b);
-    });
-    const ingredientsListUniqueSort = sortedArray;
+    /* trie tableau ordre alphabétique */
+    const ingredientsListUniqueSort = sortArray(ingredientsListUnique);
     return ingredientsListUniqueSort    
 }
 
-export function applianceListMenu(){
-    /* récupérer le tableau recette sauvegarder dans le local stockage du navigateur  */
-   let recipesData = getLocalStorage();
+export function applianceListMenu(recipes){
    let appliancesList = [];
    let recipesDataTrue = [];
-    /* sélectionne les recettes à display true   */
-   for (const recipe of recipesData){
-        if (recipe.display){
-            recipesDataTrue.push(recipe);  
-        }
+   if (!recipes) {
+    recipes = getLocalStorage()
     }
-     /*  enregistrer les appareils en minuscule dans une liste et par CSS
+   /* récupérer les recettes à display true  */
+    recipesDataTrue = recipeTrue(recipes)
+    /*  enregistrer les appareils en minuscule dans une liste et par CSS
     mettre la première lettre en majuscule    */
-   for (let index = 0; index < recipesDataTrue.length; index++) {
-       let appliances = recipesDataTrue[index].appliance;
-       appliancesList.push(`${appliances}`.toLowerCase());
-   }
+    recipesDataTrue.forEach(recipe => {
+       appliancesList.push((recipe.appliance.toLowerCase()));
+    });
    /* pas de doublon */
    const appliancesListUniqueSet = new Set(appliancesList);
    /* convertir en tableau */
    const appliancesListUnique = [...appliancesListUniqueSet] ;
-   /* Tri avec la méthode sort() et localeCompare() nécessaire
-    pour les accent et les majuscules */
-    const sortedArray = appliancesListUnique.sort(function (a, b) {
-        return a.localeCompare(b);
-   })   
-   let appliancesListUniqueSort = sortedArray;
+   /* trie tableau ordre alphabétique */  
+   let appliancesListUniqueSort = sortArray(appliancesListUnique);
    return appliancesListUniqueSort  ; 
 }
 
-export function ustensilsListMenu(){
-   /* récupérer le tableau recette sauvegarder dans le local stockage du navigateur  */
-   let recipesData = getLocalStorage();
+export function ustensilsListMenu(recipes){
    let ustensilsList = [];
    let recipesDataTrue = [];
-   /* sélectionne les recettes à display true   */
-    for (const recipe of recipesData){
-       if (recipe.display){
-           recipesDataTrue.push(recipe);  
-       }
+   if (!recipes) {
+    recipes = getLocalStorage()
     }
-   for (let index = 0; index < recipesDataTrue.length; index++) {
-       let ustensils = recipesDataTrue[index].ustensils;
-       ustensilsList.push(ustensils);
-   }
-   /* récupérer les données du sous-tableau ustensil */
+   /* récupérer les recettes à display true   */
+   recipesDataTrue = recipeTrue(recipes)
+   recipesDataTrue.forEach(recipe => {
+   ustensilsList.push(recipe.ustensils);
+   });
+   /* récupérer les données des sous-tableau ustensil dans un seul tableau */
    const ustensilsListJoined = ustensilsList.flat().map((x) => x.toLowerCase());    
-  /* Tri avec la méthode sort() et localeCompare() nécessaire
-    pour les accent et les majuscules */
-    const sortedArray = ustensilsListJoined.sort(function (a, b) {
-        return a.localeCompare(b);
-   }) 
-   const ustensilsListSort = sortedArray;
-    /* pas de doublon */
-    const ustensilsListUniqueSet = new Set(ustensilsListSort);
-    /* convertir en tableau */
-    const ustensilsListUniqueSort = [...ustensilsListUniqueSet] ;
-    /* convert Set to Array */
-    return ustensilsListUniqueSort    
+   /* Tri tableau ordre alphabétique */
+   const ustensilsListSort = sortArray(ustensilsListJoined);
+   /* pas de doublon */
+   const ustensilsListUniqueSet = new Set(ustensilsListSort);
+   /* convertir en tableau */
+   const ustensilsListUniqueSort = [...ustensilsListUniqueSet] ;
+   /* convert Set to Array */
+   return ustensilsListUniqueSort    
 }
 
 
 /**
  * affichage des recettes trié par ordre alphabétique
  */
-export function displayRecipe(){
-    const recipes = getLocalStorage();
+export function displayRecipe(recipes){
+    if (!recipes) {
+        recipes = getLocalStorage()
+    }
     console.time("trie-quick_sort");
     const recipesSortName = quickSort(recipes);
     console.timeEnd("trie-quick_sort");
@@ -188,10 +163,8 @@ export function displayRecipe(){
  * @param {*} action afficher/masquer des menus filtres
  */
  export function FiltersListDisplay(block, action) {
-    // let childrenList = null;
     switch (block) {
         case "ingredients":
-            // childrenList = document.getElementById("filterIngredients").children;
             if (action == "visible") {
                 document.getElementById("filterIngredients").classList.add("show");
                 document.getElementById("filterAppliances").classList.remove("show");
@@ -205,7 +178,6 @@ export function displayRecipe(){
             }
             break;
         case "appliances":
-            // childrenList = document.getElementById("filterAppliances").children;
             if (action == "visible") {
                 document.getElementById("filterAppliances").classList.add("show");
                 document.getElementById("filterIngredients").classList.remove("show");
@@ -219,7 +191,6 @@ export function displayRecipe(){
             }
             break;
         case "ustensils":
-            // childrenList = document.getElementById("filterUstensils").children;          
             if (action == "visible") {
                 document.getElementById("filterUstensils").classList.add("show");
                 document.getElementById("filterIngredients").classList.remove("show");
@@ -235,14 +206,12 @@ export function displayRecipe(){
     }
 }
 
-/**
- * Création de écouter d'évènement au chargement de la page
- */
+/*  Création d' écouteurs d'évènements au chargement de la page */
  export function ListenersLoad(){
-    /* listener sur le champ de recherche */
+    /* écouteur d'évènement sur le champ de recherche */
      document.querySelector("#search-input").addEventListener("keyup", actionFilters);
   
-    /* listener sur les boutons des filtres pour afficher/réduire les listes */
+    /* écouteur d'évènement sur les boutons des filtres pour afficher/réduire les listes */
     document.querySelector("#visibleIngredientsList").addEventListener("click", () =>{
         FiltersListDisplay("ingredients", "visible")
     });
@@ -262,7 +231,7 @@ export function displayRecipe(){
         FiltersListDisplay("ustensils", "hide")
     });
 
-    /* listener sur les champs de recherche des filtres avancés */
+    /* écouteur d'évènement sur les champs de recherche des filtres avancés */
     document.querySelector("#inputIngredient").addEventListener("keyup", (e) => {
         inputAvancedSearch("ingredient", e.target.value);
     });
@@ -280,7 +249,6 @@ export function displayRecipe(){
  * @param {*} nameFilter nom du menu filtre de la recherche 
  * @param {*} searchValue valeur saisie recherchée */ 
 export function inputAvancedSearch(nameFilter,searchValue){
-    // let block = "";
     let searchList = [];    
     let ingredientList = IngredientsListMenu();
     let applianceList =  applianceListMenu();
@@ -288,10 +256,10 @@ export function inputAvancedSearch(nameFilter,searchValue){
 
     switch (nameFilter) {
         case "ingredient":
-            // block = document.getElementById("ingredientsList");
             if (searchValue.length > 0) {
                 /* cherche correspondance entre la saisie input ingrédient et 
                 la liste des ingrédients  */
+
                 for (const ingredient of ingredientList) {
                     if (normalizeText(ingredient).includes(normalizeText(searchValue))) {
                         searchList.push(ingredient);
@@ -304,7 +272,6 @@ export function inputAvancedSearch(nameFilter,searchValue){
             }
             break;
         case "appliance":
-            // block = document.getElementById("appliancesList");
             if (searchValue.length > 0) {
                 for (const appliance of applianceList) {
                     if (normalizeText(appliance).includes(normalizeText(searchValue))) {
@@ -317,7 +284,6 @@ export function inputAvancedSearch(nameFilter,searchValue){
             }
             break;
         case "ustensil":
-            // block = document.getElementById("ustensilsList");
             if (searchValue.length > 0)  {
                 for (const ustensil of ustensilList) {
                     if (normalizeText(ustensil).includes(normalizeText(searchValue))) {
@@ -380,7 +346,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
        } 
        /* afficher la liste des appareils mise à jour du menu filtre  */  
        document.getElementById("appliancesList").innerHTML = itemsApplianceList;       
-        /*écouter d'évènement de la liste des appareils menu filtre pour la
+        /*écouteur d'évènement de la liste des appareils menu filtre pour la
        création des Tags */
        createdItems = document.getElementById("appliancesList").children;
        for (const item of createdItems) {
@@ -402,7 +368,7 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
         /* afficher la liste des ustensiles mise à jour du menu filtre  */  
        document.getElementById("ustensilsList").innerHTML = itemsUstensilList;
        
-       /*écouter d'évènement de la liste des ustensiles menu filtre pour la
+       /*écouteur d'évènement de la liste des ustensiles menu filtre pour la
        création des Tags */  
        createdItems = document.getElementById("ustensilsList").children;
        for (const item of createdItems) {
@@ -415,11 +381,13 @@ export function addItemsFilters(ingredientList,applianceList,ustensilList){
 
 
 /** chargement liste ingrédients  */
-export function ingredientsMenuDisplay(){
+export function ingredientsMenuDisplay(recipes){
     let content = [];
     let createdItems = null;
-    let localRecipes= getLocalStorage();
-    const ingredients = IngredientsListMenu(localRecipes);
+    if (!recipes) {
+        recipes = getLocalStorage()
+    }
+    const ingredients = IngredientsListMenu(recipes);
     const ingredientsList =  document.querySelector("#ingredientsList")
 
      ingredients.forEach(ingredient => {
@@ -428,7 +396,7 @@ export function ingredientsMenuDisplay(){
 
     ingredientsList.innerHTML = content;
 
-    /* listener de la liste des ingrédients pour la création des tags ingrédients */
+    /* écouteur d'évènement de la liste des ingrédients pour la création des tags ingrédients */
     createdItems = ingredientsList.children;
     for (const item of createdItems) {
         item.addEventListener("click", () =>{
@@ -439,10 +407,13 @@ export function ingredientsMenuDisplay(){
 
 
 /** chargement liste appareils  et écoute évènement de la liste créée.*/
-export function appliancesMenuDisplay(){
+export function appliancesMenuDisplay(recipes){
     let content = [];
     let createdItems = null;
-    const appliances = applianceListMenu();
+    if (!recipes) {
+        recipes = getLocalStorage()
+    }
+    const appliances = applianceListMenu(recipes);
     const appliancesList =  document.querySelector("#appliancesList")
 
     appliances.forEach(appliance => {
@@ -451,7 +422,7 @@ export function appliancesMenuDisplay(){
 
     appliancesList.innerHTML = content;
 
-     /* listener de la liste des appareils pour la création des tags appareils */
+     /* écouteur d'évènement de la liste des appareils pour la création des tags appareils */
     createdItems = appliancesList.children;
     for (const item of createdItems) {
         item.addEventListener("click", () =>{
@@ -462,10 +433,13 @@ export function appliancesMenuDisplay(){
 
 
 /** chargement liste ustensils au chargement de la page */
-export function ustensilsMenuDisplay(){
+export function ustensilsMenuDisplay(recipes){
     let content = [];
     let createdItems = null;
-    const ustensils = ustensilsListMenu();
+    if (!recipes) {
+        recipes = getLocalStorage()
+    }
+    const ustensils = ustensilsListMenu(recipes);
     const ustensilsList =  document.querySelector("#ustensilsList")
 
     ustensils.forEach(ustensil => {
@@ -474,7 +448,7 @@ export function ustensilsMenuDisplay(){
 
     ustensilsList.innerHTML = content;
 
-    /* listener de la liste  des ustensiles pour la création des tags appareils */
+    /* écouteur d'évènement de la liste  des ustensiles pour la création des tags ustensiles */
     createdItems = ustensilsList.children;
     for (const item of createdItems) {
         item.addEventListener("click", () =>{
@@ -547,8 +521,8 @@ export function evenTag(action,nameList,item){
 }
 
 
-/**en cours............ ALGO 2 méthodes de l'objet array
- *  actions des filtres pour trouver le(s) recette(s) */
+/**ALGO 2 méthodes de l'objet array
+ *  actions des filtres pour filtrer le(s) recette(s) */
 export function actionFilters(){
     console.time("algo2");
     let index = 0;
@@ -614,20 +588,19 @@ export function actionFilters(){
         });   
            
     }
-     /* enregister le tableau des recettes à jour pour l'affichage dans le local
+     /* enregister le tableau des recettes à jour des fitres dans le local
     stockage du navigateur  */
     setLocalStorage(currentLocalRecipes)
     console.timeEnd("algo2");
     
 
 
-    /* affichage mise à jour des recettes et des listes ingredient/appareil/ustensile  */
-    displayRecipe();
-    ingredientsMenuDisplay();
-    appliancesMenuDisplay();
-    ustensilsMenuDisplay();    
-    displayTags();
-    
+    /* affichage mise à jour des recettes filtrées et des listes ingredient/appareil/ustensile  */
+    displayRecipe(currentLocalRecipes);
+    ingredientsMenuDisplay(currentLocalRecipes);
+    appliancesMenuDisplay(currentLocalRecipes);
+    ustensilsMenuDisplay(currentLocalRecipes);    
+    displayTags();    
 }
 
 /* affichage des tag champs avancés ingrédients/appareils/ustensiles */
@@ -644,13 +617,13 @@ export function displayTags(){
     /* tags appareils sélectionnés */   
     for (let tag of applianceTags) {
         tagsList += showTag(indexTagId, "appliance", tag);
-        // Incrémentation du compteur de tags créés pour chaque ID donné
+        /* Incrémentation du compteur de tags créés pour chaque Id donné */
         indexTagId++; /* incrémentation compteur tag  */
     }
      /* tags des ustensiles sélectionnés */   
      for (let tag of ustensilTags) {
         tagsList += showTag(indexTagId, "ustensil", tag);
-        // Incrémentation du compteur de tags créés pour chaque ID donné
+        /* Incrémentation du compteur de tags créés pour chaque Id donné */
         indexTagId++; /* incrémentation compteur tag  */
     }
     document.getElementById("div-tags").innerHTML = tagsList;
@@ -669,7 +642,7 @@ export function displayTags(){
             type = "ustensil";
         }
 
-        /* listener sur les éléments tags rajoutés pour faire une suppression   */
+        /* écouteur d'évènement sur les éléments tags rajoutés pour faire une suppression   */
          tag.lastElementChild.addEventListener("click", () =>{
             evenTag("delete", type, tag.innerText);            
          })
@@ -698,8 +671,7 @@ export function showItemsAdvanced(filterName) {
  * suppression élément dans un tableau
  * @param {*} array tableau comportant élément à supprimer
  * @param {*} value élément à supprimer
- * @returns  retourne le tableau modifié (élément modifié)
- */
+ * @returns  retourne le tableau modifié (élément modifié) */
  export function arrayRemove(array, value) { 
     return array.filter(function(element){ 
         return element != value; 
@@ -727,7 +699,7 @@ export function showItemsAdvanced(filterName) {
 
 
 /** 
- * texte normalisé sans accent,pas de la plupart de ponctuation, pas de majuscule
+ * texte normalisé sans accent,pas de majuscule, remplace certaines lettres et signes de ponctuation
  * @param {*}text text non normalisé
  * @return {*} texte normalisé */ 
 export function normalizeText(text){
@@ -763,8 +735,32 @@ export function quickSort(recipes) {
       if (recipes[i].name > pivot.name) greater.push(recipes[i]);
       else lesser.push(recipes[i]);
     }
-    // fusion des 2 sous-tableaux
+    /* fusion des 2 sous-tableaux */
     return quickSort(lesser).concat(pivot, quickSort(greater));
   }
 
+
+/* Tri avec la méthode sort() et localeCompare() nécessaire
+pour les accent et les majuscules  pour un tableau*/
+function sortArray(tab){
+    const sortedArray = tab.sort(function (a, b) {
+        return a.localeCompare(b);
+    })
+    return sortedArray;
+}
+
+/* retourne les recettes à display true   */
+function recipeTrue(recipesDataTrue) {
+      let array = []
+      recipesDataTrue.forEach(recipe => {
+        if (recipe.display){
+            array.push(recipe);  
+            }
+        })
+    return array    
+}
+
+
+    
+   
 
