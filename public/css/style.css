@@ -125,7 +125,11 @@ header img{
     text-transform: uppercase;  
 }
 .filterItem p {
-    margin: 0;  
+    margin: 0;      
+}
+.filterItem p:hover {
+    font-weight: 800;  
+    transform: scale(1.08);
 }
 #ingredientsList+p::first-letter {
     text-transform: uppercase;
@@ -160,6 +164,9 @@ header img{
 .div-arrow{
     display: flex;
     width: 15px;
+}
+.div-arrow:hover{
+    transform: scale(2);    
 }
 .show .filterList{
     width: 100%;
