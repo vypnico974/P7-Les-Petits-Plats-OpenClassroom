@@ -1,5 +1,5 @@
 import {getRecipes, setLocalStorage} from "./dataConnection.js";
-import {appliancesMenuDisplay, displayRecipe, ingredientsMenuDisplay, ListenersLoad,ustensilsMenuDisplay } from "./utils.js";
+import {appliancesMenuDisplay, displayRecipe, ingredientsMenuDisplay, listenersLoad,ustensilsMenuDisplay } from "./utils.js";
 
 async function initPage(){
   /*lecture de recipes.json pour extraction des données avec rajout d'un champs
@@ -9,7 +9,7 @@ async function initPage(){
   du navigateur à l'initialisation de la page  */
   setLocalStorage(recipes);
  /* création des écouteurs d'évènements  */
-  ListenersLoad();
+  listenersLoad();
   /* affichage des menus filtres ingrédients/appareils/ustensiles  */
   ingredientsMenuDisplay(recipes);
   appliancesMenuDisplay(recipes);

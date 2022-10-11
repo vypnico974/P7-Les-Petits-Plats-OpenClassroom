@@ -84,7 +84,7 @@ export function ustensilsListMenu(recipes){
    const ustensilsListUniqueSet = new Set(ustensilsListSort);
    /* convertir en tableau */
    const ustensilsListUniqueSort = [...ustensilsListUniqueSet] ;
-   /* convert Set to Array */
+   
    return ustensilsListUniqueSort    
 }
 
@@ -155,7 +155,6 @@ export function displayRecipe(recipes){
                     </div>
                 </div>`;
     
-           
         }      
     }); 
     /* affichage du message si aucun résultat*/
@@ -168,13 +167,10 @@ export function displayRecipe(recipes){
     } 
 }
 
-
-
 /**
  * Gestion de l'affichage des menus de filtres
  * @param {*} block nom du menu à  afficher/cacher
- * @param {*} action afficher/masquer des menus filtres
- */
+ * @param {*} action afficher/masquer des menus filtres */
  export function FiltersListDisplay(block, action) {
     switch (block) {
         case "ingredients":
@@ -220,7 +216,7 @@ export function displayRecipe(recipes){
 }
 
 /*  Création d' écouteurs d'évènements au chargement de la page */
- export function ListenersLoad(){
+ export function listenersLoad(){
     /* écouteur d'évènement sur le champ de recherche */
      document.querySelector("#search-input").addEventListener("keyup", actionFilters);
   
@@ -537,7 +533,7 @@ export function evenTag(action,nameList,item){
  /******  ALGO 1 -- boucle native FOR ***************/
 /* actions des filtres pour filtrer recettes */
 export function actionFilters(){
-    console.time("algo1"); /* debut mesure du temps d'exécution de l'algo 1    */    
+  //  console.time("algo1"); /* debut mesure du temps d'exécution de l'algo 1    */    
     let currentLocalRecipes= getLocalStorage();
     let isDisplay = "";
     let inputSearch = document.getElementById("search-input").value;
@@ -647,7 +643,7 @@ export function actionFilters(){
     /* enregisterement de la mise à jour tableau recette display true/false dans le local
     stockage du navigateur */
     setLocalStorage(currentLocalRecipes);
-    console.timeEnd("algo1"); /* fin mesure du temps d'exécution de l'algo 1    */ 
+  //  console.timeEnd("algo1"); /* fin mesure du temps d'exécution de l'algo 1    */ 
 
     /* affichage des recettes et des champs avancés modifié(s)  */
     displayRecipe(currentLocalRecipes);
