@@ -262,6 +262,8 @@ si plus, ... et  masqué le reste du texte*/
 .divRecipeInfo{
     background-color: var(--background-color) ;
     min-height: 160px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 .headRecipeInfo{
     display: flex;
