@@ -96,9 +96,9 @@ export function displayRecipe(recipes){
     if (!recipes) {
         recipes = getLocalStorage()
     }
-    console.time("trie-sort");
+   // console.time("trie-sort");
     const recipesSortName = sortByName(recipes);
-    console.timeEnd("trie-sort");
+   // console.timeEnd("trie-sort");
     const dom = document.querySelector("#div-recipes");
     const message = document.querySelector("#div-message");
     let content = ""; /* pour structure card  */
@@ -558,7 +558,11 @@ export function actionFilters(){
         for (const recipe of currentLocalRecipes) {
             /* 4 bloc de recherches : une recherche principale par le champs recherche (la barre)
             et les 3 trois champs avancés (ingrédient/appareil/ustensile)
-            en fonctions résultat de ces 4 blocs, affichage ou pas de la recette */
+            en fonctions résultat de ces 4 blocs, affichage ou pas de la recette 
+            attention pour la méthode includes : 
+            const tableau = ['bananes', 'poire'];   const text = 'bananes poire'
+            console.log(tableau.includes('banane'));  //  faux
+            console.log(text.includes('banane'));  // vrai  */  
             let isDisplayMain = true;
             /*  recherche principale   */
             /* début de la recherche à partir de 3 caractères    */
