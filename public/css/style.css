@@ -257,6 +257,8 @@ prévoir object-fit: cover  lorsqu'il y aura des images */
 .divRecipeInfo{
     background-color: var(--background-color) ;
     min-height: 160px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 .headRecipeInfo{
     display: flex;
