@@ -7,7 +7,8 @@ let ustensilTags = [];
 
 /**
  * récupére la liste des ingrédients par ordre alphabétique
- * @param {*} recipes tableau des recettes */
+ * @param {*} recipes tableau des recettes
+ * @return {*} ingredientsListUniqueSort tableau liste ingrédients */
 export function IngredientsListMenu(recipes){
     let recipesDataTrue = [];
     let ingredientsList = [];
@@ -35,7 +36,8 @@ export function IngredientsListMenu(recipes){
 
 /**
  * récupére la liste des appareils par ordre alphabétique
- * @param {*} recipes tableau des recettes */
+ * @param {*} recipes tableau des recette
+ * @return {*} appliancesListUniqueSort tableau liste appareils */
 export function applianceListMenu(recipes){
    let appliancesList = [];
    let recipesDataTrue = [];
@@ -60,7 +62,8 @@ export function applianceListMenu(recipes){
 
 /**
  * récupére la liste des ustensiles par ordre alphabétique
- * @param {*} recipes tableau des recettes */
+ * @param {*} recipes tableau des recettes 
+ * @return {*} ustensilsListUniqueSort tableau liste ustensiles */
 export function ustensilsListMenu(recipes){
    let ustensilsList = [];
    let recipesDataTrue = [];
@@ -79,8 +82,7 @@ export function ustensilsListMenu(recipes){
    /* pas de doublon */
    const ustensilsListUniqueSet = new Set(ustensilsListSort);
    /* convertir en tableau */
-   const ustensilsListUniqueSort = [...ustensilsListUniqueSet] ;
- 
+   const ustensilsListUniqueSort = [...ustensilsListUniqueSet] ; 
    return ustensilsListUniqueSort    
 }
 
@@ -92,9 +94,9 @@ export function displayRecipe(recipes){
     if (!recipes) {
         recipes = getLocalStorage()
     }
-    console.time("trie-quick_sort");
+ //   console.time("trie-quick_sort"); /* début mesure durée d'excution trie sort   */
     const recipesSortName = quickSort(recipes);
-    console.timeEnd("trie-quick_sort");
+ //   console.timeEnd("trie-quick_sort"); /*fin  mesure durée d'excution trie sort   */
     const dom = document.querySelector("#div-recipes");
     const message = document.querySelector("#div-message");
     let content = ""; /* pour structure card  */
@@ -215,7 +217,7 @@ export function displayRecipe(recipes){
 }
 
 /* écouteurs d'évènements au chargement de la page */
- export function ListenersLoad(){
+ export function listenersLoad(){
     /* écouteur d'évènement sur le champ de recherche */
      document.querySelector("#search-input").addEventListener("keyup", actionFilters);
   
@@ -302,8 +304,6 @@ export function inputAvancedSearch(nameFilter,searchValue){
             }
         break;
     }
-
-  
 }
 
 /**
@@ -531,7 +531,7 @@ export function evenTag(action,nameList,item){
 /**ALGO 2 méthodes de l'objet array
  *  actions des filtres pour filtrer le(s) recette(s) */
 export function actionFilters(){
-    console.time("algo2"); /* début de mesure de la durée d'excécution algo2   */
+  //  console.time("algo2"); /* début de mesure de la durée d'excécution algo2   */
     let index = 0;
     let isDisplay = true;
     let currentLocalRecipes= getLocalStorage();
@@ -560,7 +560,11 @@ export function actionFilters(){
         si rendre dans le bloc de recherche valeur true en sortie en cas de correspondance
         si un des 4 bloc retourne false en cas de non correspondance, la recette ne sera pas affiché 
         si un bloc n'est pas active, le tableau correspond à ce bloc est vide, et la particularité
-        de la méthode every est qu'elle retourne true sur un tableau vide  */        
+        de la méthode every est qu'elle retourne true pour un tableau vide  */  
+        /*  attention pour la méthode includes : 
+        const tableau = ['bananes', 'poire'];   const text = 'bananes poire'
+        console.log(tableau.includes('banane'));  //  faux
+        console.log(text.includes('banane'));  // vrai  */      
         currentLocalRecipes.forEach(recipe => {
         
         isDisplay = inputSearchArray.every(
@@ -599,7 +603,7 @@ export function actionFilters(){
      /* enregister le tableau des recettes à jour des fitres dans le local
     stockage du navigateur  */
     setLocalStorage(currentLocalRecipes)
-    console.timeEnd("algo2"); /* fin de mesure de la durée d'excécution de l'algo2   */
+  //  console.timeEnd("algo2"); /* fin de mesure de la durée d'excécution de l'algo2   */
     
     /* affichage mise à jour des recettes filtrées et des listes ingredient/appareil/ustensile  */
     displayRecipe(currentLocalRecipes);
@@ -765,8 +769,8 @@ function sortArray(tab){
 }
 
 /**  retourne les recettes à display true   
- * @param {*} tableau recettes
- * @return {*} tableau recettes à display true*/ 
+* @param {*} tableau recettes
+* @return {*} tableau recettes à display true*/ 
 function recipeTrue(recipesDataTrue) {
       let array = []
       recipesDataTrue.forEach(recipe => {

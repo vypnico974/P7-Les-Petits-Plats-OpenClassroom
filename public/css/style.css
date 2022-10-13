@@ -243,7 +243,8 @@ si plus, ... et  masqué le reste du texte*/
     flex-direction: row;
     flex-wrap: wrap;
 }
-/* pas d'image, mise en place d'un fond gris */
+/* pas d'image pour le moment, mise en place d'un fond gris à la place
+prévoir object-fit: cover  lorsqu'il y aura des images */
 .recipePicture{
     height: 170px;
     width: 100%;

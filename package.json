@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --max-warnings=0 ."
+    "lint": "eslint --max-warnings=0 .",
+    "prefix": "postcss ./public/css/style.css --use autoprefixer -d ./public/css/prefix/"
   },
   "repository": {
     "type": "git",
