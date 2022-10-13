@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<!-- meta -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" type="image/png" href="./public/image/icone_logo.png">
+<!--CSS bootstrap-->
+<link
+rel="stylesheet"
+href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+crossorigin="anonymous"
+>
+<!-- CSS  -->
+<link href="./public/css/normalize.css" rel="stylesheet" type="text/css">
+<!-- CSS personnalisé -->
+<link href="./public/css/prefix/style.css" rel="stylesheet" type="text/css">
+ <!-- google fonts import --> 
+ <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+ <!-- kit fontawesome pour import d'icône-->
+ <script src="https://kit.fontawesome.com/0b6d538c32.js" crossorigin="anonymous"></script>
+<title>Les petits plats</title>
+</head>
+<body>
+
+    <header>
+        <!-- Logo les petits plats -->
+        <div class="div-center">
+            <div>
+                <a href="./index.html">
+                    <img src="./public/image/icone_logo.png" alt="Page d'acceuil les Petits Plats">
+                </a>                
+            </div>            
+            <h1 class="text-logo">Les petits plats</h1>
+        </div>
+       
+    </header>
+
+    <main id="main">
+        <!-- barre de recherche -->
+        <div class="search-bar">
+            <input id="search-input" name="search-input" placeholder="Rechercher une recette..." aria-label="Recherche">
+            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+        </div>
+
+       
+        <!--Tag sélectionnés-->
+        <div id="div-tags"></div>
+
+
+        <!-- Menu des filtres ingrédients-appareils-ustensiles -->
+        <div id="div-Menu">
+            <!--filtre ingrédients-->
+            <div class="div-filter bold" id="filterIngredients">
+                <div class="filterButton">
+                    <span>Ingrédients</span>
+                    <input  name="inputIngredient" id="inputIngredient" type="text" class="inputFilter" placeholder="Rechercher un ingrédient">
+                    <div class="div-arrow">
+                        <i id="visibleIngredientsList" class="fa-solid fa-angle-down filterArrowDown" ></i>
+                        <i id="hideIngredientsList" class="fa-solid fa-angle-up filterArrowUp hidden"></i>
+                    </div>                    
+                </div> 
+                <div id="ingredientsList" class="filterList"></div>
+            </div>
+             <!--filtre appareils-->           
+            <div  id="filterAppliances" class="div-filter bold">
+                <div class="filterButton">
+                    <span>Appareils</span>
+                    <input id="inputAppliance" name="inputAppliance" type="text" class="inputFilter" placeholder="Rechercher un appareil"  >
+                    <div class="div-arrow">
+                        <i id="visibleAppliancesList" class="fa-solid fa-angle-down filterArrowDown"></i>
+                        <i id="hideAppliancesList" class="fa-solid fa-angle-up filterArrowUp hidden" ></i>
+                    </div>                    
+                </div>
+                <div id="appliancesList" class="filterList"></div>
+            </div>
+            <!--filtre appareils-->           
+            <div id="filterUstensils" class="div-filter bold" >
+                <div class="filterButton">
+                    <span>Ustensiles</span>
+                    <input type="text" class="inputFilter" placeholder="Rechercher un ustensile"
+                     name="inputUstensil" id="inputUstensil">
+                    <div class="div-arrow">
+                        <i id="visibleUstensilsList" class="fa-solid fa-angle-down filterArrowDown" ></i>
+                        <i id="hideUstensilsList" class="fa-solid fa-angle-up filterArrowUp hidden" ></i>
+                    </div>                    
+                </div>
+                <div id="ustensilsList" class="filterList"></div>
+            </div>
+            
+        </div>
+
+        
+        <!-- bloc message resultat...-->
+        <div id="div-message">
+        </div>
+
+
+        <!-- bloc recettes-->
+        <div id="div-recipes">            
+        </div>
+
+
+    </main>
+
+    <!--script du projet-->
+    <script src="./javascript/index.js" type="module"></script>
+
+     <!-- scripts pour bootstrap -->
+     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> 
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+   </body>
+</html>
+
